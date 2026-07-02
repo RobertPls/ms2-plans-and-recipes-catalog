@@ -1,5 +1,5 @@
 using Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan;
-using Catalog.Shared.Core;
+using Shared.Core;
 using Catalog.Domain;
 using Catalog.Domain.Factory.PlanAlimentario;
 using Catalog.Domain.Model.PlanesAlimentarios;

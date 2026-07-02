@@ -8,9 +8,9 @@ using Catalog.Domain.Repository.PlanAlimentario;
 using Catalog.Domain.Repository.Receta;
 using Catalog.Domain.ValueObjects;
 using Catalog.Infrastructure.EntityFramework.Context;
-using Catalog.Shared.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Shared.Core;
 
 namespace Catalog.Infrastructure.Seed
 {
@@ -90,7 +90,7 @@ namespace Catalog.Infrastructure.Seed
 
         private async Task SeedRecetas()
         {
-            var alimentos = await _alimentoRepo.FindAllAsync();
+            var alimentos = await _context.Alimento.ToListAsync();
             var polloId = alimentos.First(a => a.Nombre == "Pollo").Id;
             var arrozId = alimentos.First(a => a.Nombre == "Arroz").Id;
             var frijolesId = alimentos.First(a => a.Nombre == "Frijoles").Id;
@@ -174,7 +174,7 @@ namespace Catalog.Infrastructure.Seed
 
         private async Task SeedPlanesAlimentarios()
         {
-            var recetas = await _recetaRepo.FindAllAsync();
+            var recetas = await _context.Receta.Include("_ingredientes").ToListAsync();
 
             var desayunos = new[]
             {

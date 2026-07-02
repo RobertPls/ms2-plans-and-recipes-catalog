@@ -1,20 +1,21 @@
 using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Query.PlanAlimentario;
-using Catalog.Domain.Repository.PlanAlimentario;
-using Catalog.Shared.Core;
+using Catalog.Infrastructure.EntityFramework.Context;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.PlanAlimentario
 {
     public class ListarPlanesHandler : IRequestHandler<ListarPlanesQuery, PagedList<PlanAlimentarioDto>>
     {
-        private readonly IPlanAlimentarioRepository _repository;
+        private readonly ReadDbContext _dbContext;
         private readonly ILogger<ListarPlanesHandler> _logger;
 
-        public ListarPlanesHandler(IPlanAlimentarioRepository repository, ILogger<ListarPlanesHandler> logger)
+        public ListarPlanesHandler(ReadDbContext dbContext, ILogger<ListarPlanesHandler> logger)
         {
-            _repository = repository;
+            _dbContext = dbContext;
             _logger = logger;
         }
 
@@ -22,13 +23,13 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
         {
             try
             {
-                var planes = await _repository.FindAllAsync();
+                var planes = await _dbContext.PlanAlimentario.ToListAsync(cancellationToken);
                 var dtoItems = planes.Select(p => new PlanAlimentarioDto
                 {
-                    Id = p.Id.Value,
+                    Id = p.Id,
                     Nombre = p.Nombre,
-                    DuracionTipo = p.Duracion.Tipo.ToString(),
-                    DiasTotal = p.Duracion.Dias(),
+                    DuracionTipo = p.DuracionTipo,
+                    DiasTotal = p.DuracionTipo == "QUINCENAL" ? 15 : 30,
                     FechaInicio = p.FechaInicio
                 }).AsQueryable();
 

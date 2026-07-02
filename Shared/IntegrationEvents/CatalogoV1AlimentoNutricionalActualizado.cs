@@ -1,6 +1,8 @@
-namespace Catalog.Shared.IntegrationEvents
+using Shared.Core;
+
+namespace Shared.IntegrationEvents
 {
-    public record CatalogoV1AlimentoNutricionalActualizado
+    public record CatalogoV1AlimentoNutricionalActualizado : IntegrationEvent
     {
         public string EventType => "CatalogoV1.AlimentoNutricionalActualizado";
         public Guid AlimentoId { get; init; }

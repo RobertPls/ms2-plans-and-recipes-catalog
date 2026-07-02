@@ -2,11 +2,13 @@ using Catalog.Domain.ValueObjects;
 
 namespace Catalog.Domain.Factory.PlanAlimentario
 {
+    using PlanAlimentario = Catalog.Domain.Model.PlanesAlimentarios.PlanAlimentario;
+
     public class PlanAlimentarioFactory : IPlanAlimentarioFactory
     {
-        public Model.PlanesAlimentarios.PlanAlimentario Create(string nombre, DuracionPlan duracion, DateTime fechaInicio)
+        public PlanAlimentario Create(string nombre, DuracionPlan duracion, DateTime fechaInicio)
         {
-            return new Model.PlanesAlimentarios.PlanAlimentario(nombre, duracion, fechaInicio);
+            return new PlanAlimentario(nombre, duracion, fechaInicio);
         }
     }
 }

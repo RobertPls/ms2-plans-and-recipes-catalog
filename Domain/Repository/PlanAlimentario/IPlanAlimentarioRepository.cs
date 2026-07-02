@@ -1,12 +1,13 @@
 using Catalog.Domain.ValueObjects;
-using Catalog.Shared.Core;
+using Shared.Core;
 
 namespace Catalog.Domain.Repository.PlanAlimentario
 {
-    public interface IPlanAlimentarioRepository : IRepository<Model.PlanesAlimentarios.PlanAlimentario, PlanId>
+    using PlanAlimentario = Catalog.Domain.Model.PlanesAlimentarios.PlanAlimentario;
+
+    public interface IPlanAlimentarioRepository : IRepository<PlanAlimentario, PlanId>
     {
-        Task<IReadOnlyCollection<Model.PlanesAlimentarios.PlanAlimentario>> FindAllAsync();
-        Task UpdateAsync(Model.PlanesAlimentarios.PlanAlimentario plan);
-        Task RemoveAsync(Model.PlanesAlimentarios.PlanAlimentario plan);
+        Task UpdateAsync(PlanAlimentario plan);
+        Task RemoveAsync(PlanAlimentario plan);
     }
 }

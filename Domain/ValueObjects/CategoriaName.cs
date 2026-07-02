@@ -1,5 +1,5 @@
-using Catalog.Shared.Core;
-using Catalog.Shared.Rules;
+using Shared.Core;
+using Shared.Rules;
 
 namespace Catalog.Domain.ValueObjects
 {

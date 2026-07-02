@@ -27,13 +27,6 @@ namespace Catalog.Infrastructure.EntityFramework.Repository.PlanesAlimentarios
                 .SingleOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public async Task<IReadOnlyCollection<PlanAlimentario>> FindAllAsync()
-        {
-            return await _context.PlanAlimentario
-                .Include("_diasDelPlan._tiemposDeComida")
-                .ToListAsync();
-        }
-
         public Task UpdateAsync(PlanAlimentario plan)
         {
             _context.PlanAlimentario.Update(plan);

@@ -1,14 +1,14 @@
-namespace Catalog.Shared.Core
+namespace Shared.Core
 {
     public abstract record IntegrationEvent
     {
-        public DateTime OccurredOn { get; }
-        public Guid EventId { get; }
+        public DateTime OccuredOn { get; }
+        public Guid EventId { get; set; }
 
         protected IntegrationEvent()
         {
-            OccurredOn = DateTime.UtcNow;
             EventId = Guid.NewGuid();
+            OccuredOn = DateTime.UtcNow;
         }
     }
 }

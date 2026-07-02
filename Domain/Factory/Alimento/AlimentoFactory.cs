@@ -2,11 +2,13 @@ using Catalog.Domain.ValueObjects;
 
 namespace Catalog.Domain.Factory.Alimento
 {
+    using Alimento = Catalog.Domain.Model.Alimentos.Alimento;
+
     public class AlimentoFactory : IAlimentoFactory
     {
-        public Model.Alimentos.Alimento Create(string nombre, string categoria, InfoNutricional infoNutricional)
+        public Alimento Create(string nombre, string categoria, InfoNutricional infoNutricional)
         {
-            return new Model.Alimentos.Alimento(nombre, categoria, infoNutricional);
+            return new Alimento(nombre, categoria, infoNutricional);
         }
     }
 }

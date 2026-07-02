@@ -1,5 +1,5 @@
 using Catalog.Domain.Model.Alimentos;
-using Catalog.Shared.Core;
+using Shared.Core;
 using Catalog.Domain.ValueObjects;
 using Catalog.Domain.Event.Receta;
 

@@ -1,7 +1,7 @@
-using Catalog.Shared.Core;
-using Catalog.Shared.Rules;
+using Shared.Core;
+using Shared.Rules;
 
-namespace Catalog.Shared.ValueObjects
+namespace Shared.ValueObjects
 {
     public record PersonNameValue : ValueObject
     {

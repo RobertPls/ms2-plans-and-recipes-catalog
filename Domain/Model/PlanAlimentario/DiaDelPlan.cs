@@ -1,4 +1,4 @@
-using Catalog.Shared.Core;
+using Shared.Core;
 
 namespace Catalog.Domain.Model.PlanesAlimentarios
 {

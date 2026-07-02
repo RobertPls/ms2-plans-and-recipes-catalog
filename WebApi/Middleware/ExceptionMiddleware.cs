@@ -1,6 +1,6 @@
 using System.Net;
 using System.Text.Json;
-using Catalog.Shared.Core;
+using Shared.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 

@@ -2,7 +2,8 @@ using Catalog.Application.Dto;
 using Catalog.Application.UseCase.Query.Alimento;
 using Catalog.Domain.Repository.Alimento;
 using Catalog.Domain.ValueObjects;
-using Catalog.Shared.Core;
+using Shared.Core;
+using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.Alimento

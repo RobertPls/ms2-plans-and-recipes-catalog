@@ -1,6 +1,6 @@
-using Catalog.Shared.Core;
+using Shared.Core;
 using Catalog.Infrastructure.EntityFramework.Context;
-using Catalog.Shared.Core;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Catalog.Infrastructure.EntityFramework

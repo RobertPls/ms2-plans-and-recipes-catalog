@@ -1,18 +1,14 @@
-namespace Catalog.Shared.Core
-{
-    public class ConfirmedDomainEvent
-    {
-        public DomainEvent DomainEvent { get; }
-        public bool Confirmed { get; private set; }
+using MediatR;
 
-        public ConfirmedDomainEvent(DomainEvent domainEvent)
+namespace Shared.Core
+{
+    public class ConfirmedDomainEvent<T> : INotification where T : DomainEvent
+    {
+        public T DomainEvent { get; }
+
+        public ConfirmedDomainEvent(T domainEvent)
         {
             DomainEvent = domainEvent;
-        }
-
-        public void MarkConfirmed()
-        {
-            Confirmed = true;
         }
     }
 }

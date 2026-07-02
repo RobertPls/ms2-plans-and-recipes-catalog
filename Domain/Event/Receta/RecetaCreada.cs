@@ -1,4 +1,4 @@
-using Catalog.Shared.Core;
+using Shared.Core;
 using Catalog.Domain.ValueObjects;
 
 namespace Catalog.Domain.Event.Receta

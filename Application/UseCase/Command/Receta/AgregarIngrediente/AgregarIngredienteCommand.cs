@@ -1,4 +1,5 @@
-using Catalog.Shared.Core;
+using Shared.Core;
+using MediatR;
 
 namespace Catalog.Application.UseCase.Command.Receta.AgregarIngrediente
 {

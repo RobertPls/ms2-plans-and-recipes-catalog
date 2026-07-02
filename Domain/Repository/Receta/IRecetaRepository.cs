@@ -1,12 +1,13 @@
 using Catalog.Domain.ValueObjects;
-using Catalog.Shared.Core;
+using Shared.Core;
 
 namespace Catalog.Domain.Repository.Receta
 {
-    public interface IRecetaRepository : IRepository<Model.Recetas.Receta, RecetaId>
+    using Receta = Catalog.Domain.Model.Recetas.Receta;
+
+    public interface IRecetaRepository : IRepository<Receta, RecetaId>
     {
-        Task<IReadOnlyCollection<Model.Recetas.Receta>> FindAllAsync();
-        Task UpdateAsync(Model.Recetas.Receta receta);
-        Task RemoveAsync(Model.Recetas.Receta receta);
+        Task UpdateAsync(Receta receta);
+        Task RemoveAsync(Receta receta);
     }
 }

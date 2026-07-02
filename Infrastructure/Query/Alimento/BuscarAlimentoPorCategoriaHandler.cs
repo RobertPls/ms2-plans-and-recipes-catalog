@@ -1,20 +1,21 @@
 using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Query.Alimento;
-using Catalog.Domain.Repository.Alimento;
-using Catalog.Shared.Core;
+using Catalog.Infrastructure.EntityFramework.Context;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.Alimento
 {
     public class BuscarAlimentoPorCategoriaHandler : IRequestHandler<BuscarAlimentoPorCategoriaQuery, PagedList<AlimentoDto>>
     {
-        private readonly IAlimentoRepository _repository;
+        private readonly ReadDbContext _dbContext;
         private readonly ILogger<BuscarAlimentoPorCategoriaHandler> _logger;
 
-        public BuscarAlimentoPorCategoriaHandler(IAlimentoRepository repository, ILogger<BuscarAlimentoPorCategoriaHandler> logger)
+        public BuscarAlimentoPorCategoriaHandler(ReadDbContext dbContext, ILogger<BuscarAlimentoPorCategoriaHandler> logger)
         {
-            _repository = repository;
+            _dbContext = dbContext;
             _logger = logger;
         }
 
@@ -22,17 +23,19 @@ namespace Catalog.Infrastructure.Query.Alimento
         {
             try
             {
-                var alimentos = await _repository.FindByCategoryAsync(request.Categoria);
+                var alimentos = await _dbContext.Alimento
+                    .Where(a => a.Categoria == request.Categoria)
+                    .ToListAsync(cancellationToken);
                 var dtoItems = alimentos.Select(a => new AlimentoDto
                 {
-                    Id = a.Id.Value,
+                    Id = a.Id,
                     Nombre = a.Nombre,
                     Categoria = a.Categoria,
-                    Gramos = a.InfoNutricionalBase.Gramos,
-                    Calorias = a.InfoNutricionalBase.Calorias,
-                    Proteinas = a.InfoNutricionalBase.Proteinas,
-                    Carbohidratos = a.InfoNutricionalBase.Carbohidratos,
-                    Grasas = a.InfoNutricionalBase.Grasas
+                    Gramos = a.Gramos,
+                    Calorias = a.Calorias,
+                    Proteinas = a.Proteinas,
+                    Carbohidratos = a.Carbohidratos,
+                    Grasas = a.Grasas
                 }).AsQueryable();
 
                 return PagedList<AlimentoDto>.Create(dtoItems, request.Page, request.PageSize);

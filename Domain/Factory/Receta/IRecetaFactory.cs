@@ -1,7 +1,9 @@
 namespace Catalog.Domain.Factory.Receta
 {
+    using Receta = Catalog.Domain.Model.Recetas.Receta;
+
     public interface IRecetaFactory
     {
-        Model.Recetas.Receta Create(string nombre, string instrucciones);
+        Receta Create(string nombre, string instrucciones);
     }
 }

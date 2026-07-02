@@ -1,7 +1,8 @@
 using Catalog.Application.UseCase.Command.Receta.CrearReceta;
 using Catalog.Application.UseCase.Command.Receta.AgregarIngrediente;
 using Catalog.Application.UseCase.Query.Receta;
-using Catalog.Shared.Core;
+using Shared.Core;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.WebApi.Controllers

@@ -1,20 +1,22 @@
 using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Query.Receta;
-using Catalog.Domain.Repository.Receta;
-using Catalog.Shared.Core;
+using Catalog.Infrastructure.EntityFramework.Context;
+using Catalog.Infrastructure.EntityFramework.ReadModel.Receta;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.Receta
 {
     public class ListarRecetasHandler : IRequestHandler<ListarRecetasQuery, PagedList<RecetaDto>>
     {
-        private readonly IRecetaRepository _repository;
+        private readonly ReadDbContext _dbContext;
         private readonly ILogger<ListarRecetasHandler> _logger;
 
-        public ListarRecetasHandler(IRecetaRepository repository, ILogger<ListarRecetasHandler> logger)
+        public ListarRecetasHandler(ReadDbContext dbContext, ILogger<ListarRecetasHandler> logger)
         {
-            _repository = repository;
+            _dbContext = dbContext;
             _logger = logger;
         }
 
@@ -22,12 +24,12 @@ namespace Catalog.Infrastructure.Query.Receta
         {
             try
             {
-                var recetas = await _repository.FindAllAsync();
+                var recetas = await _dbContext.Receta.Include(r => r.Ingredientes).ToListAsync(cancellationToken);
                 var dtoItems = recetas.Select(r =>
                 {
                     var dto = new RecetaDto
                     {
-                        Id = r.Id.Value,
+                        Id = r.Id,
                         Nombre = r.Nombre,
                         Instrucciones = r.Instrucciones
                     };
@@ -35,9 +37,9 @@ namespace Catalog.Infrastructure.Query.Receta
                     {
                         dto.Ingredientes.Add(new IngredienteDto
                         {
-                            AlimentoId = ing.AlimentoId.Value,
-                            Cantidad = ing.Porcion.Cantidad,
-                            Unidad = ing.Porcion.Unidad
+                            AlimentoId = ing.AlimentoId,
+                            Cantidad = ing.PorcionCantidad,
+                            Unidad = ing.PorcionUnidad
                         });
                     }
                     return dto;

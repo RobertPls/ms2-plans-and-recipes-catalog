@@ -1,7 +1,8 @@
 using Catalog.Application.UseCase.Command.Alimento.CrearAlimento;
 using Catalog.Application.UseCase.Command.Alimento.ActualizarInfoNutricional;
 using Catalog.Application.UseCase.Query.Alimento;
-using Catalog.Shared.Core;
+using Shared.Core;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.WebApi.Controllers

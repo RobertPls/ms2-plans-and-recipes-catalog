@@ -2,8 +2,10 @@ using Catalog.Domain.ValueObjects;
 
 namespace Catalog.Domain.Factory.PlanAlimentario
 {
+    using PlanAlimentario = Catalog.Domain.Model.PlanesAlimentarios.PlanAlimentario;
+
     public interface IPlanAlimentarioFactory
     {
-        Model.PlanesAlimentarios.PlanAlimentario Create(string nombre, DuracionPlan duracion, DateTime fechaInicio);
+        PlanAlimentario Create(string nombre, DuracionPlan duracion, DateTime fechaInicio);
     }
 }

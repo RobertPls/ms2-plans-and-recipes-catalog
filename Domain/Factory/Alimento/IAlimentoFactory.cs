@@ -2,8 +2,10 @@ using Catalog.Domain.ValueObjects;
 
 namespace Catalog.Domain.Factory.Alimento
 {
+    using Alimento = Catalog.Domain.Model.Alimentos.Alimento;
+
     public interface IAlimentoFactory
     {
-        Model.Alimentos.Alimento Create(string nombre, string categoria, InfoNutricional infoNutricional);
+        Alimento Create(string nombre, string categoria, InfoNutricional infoNutricional);
     }
 }

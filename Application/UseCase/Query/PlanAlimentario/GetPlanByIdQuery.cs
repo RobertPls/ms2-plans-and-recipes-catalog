@@ -1,5 +1,6 @@
 using Catalog.Application.Dto;
-using Catalog.Shared.Core;
+using Shared.Core;
+using MediatR;
 
 namespace Catalog.Application.UseCase.Query.PlanAlimentario
 {

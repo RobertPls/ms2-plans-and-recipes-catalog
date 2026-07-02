@@ -25,17 +25,6 @@ namespace Catalog.Infrastructure.EntityFramework.Repository.Alimentos
             return await _context.Alimento.SingleOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public async Task<IReadOnlyCollection<Alimento>> FindAllAsync()
-        {
-            return await _context.Alimento.ToListAsync();
-        }
-
-        public async Task<IReadOnlyCollection<Alimento>> FindByCategoryAsync(string categoria)
-        {
-            var categoriaName = (CategoriaName)categoria;
-            return await _context.Alimento.Where(x => x.Categoria == categoriaName).ToListAsync();
-        }
-
         public Task UpdateAsync(Alimento alimento)
         {
             _context.Alimento.Update(alimento);

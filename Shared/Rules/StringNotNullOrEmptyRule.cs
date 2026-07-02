@@ -1,6 +1,6 @@
-using Catalog.Shared.Core;
+using Shared.Core;
 
-namespace Catalog.Shared.Rules
+namespace Shared.Rules
 {
     public class StringNotNullOrEmptyRule : IBussinessRule
     {

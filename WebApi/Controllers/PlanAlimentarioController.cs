@@ -2,7 +2,8 @@ using Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan;
 using Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComida;
 using Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiempo;
 using Catalog.Application.UseCase.Query.PlanAlimentario;
-using Catalog.Shared.Core;
+using Shared.Core;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.WebApi.Controllers

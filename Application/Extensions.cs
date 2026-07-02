@@ -1,7 +1,7 @@
 using Catalog.Domain.Factory.Alimento;
 using Catalog.Domain.Factory.PlanAlimentario;
 using Catalog.Domain.Factory.Receta;
-using Catalog.Shared.Core;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Catalog.Application
@@ -14,13 +14,7 @@ namespace Catalog.Application
             services.AddTransient<IRecetaFactory, RecetaFactory>();
             services.AddTransient<IAlimentoFactory, AlimentoFactory>();
 
-            services.Scan(scan => scan
-                .FromAssembliesOf(typeof(Extensions))
-                .AddClasses(classes => classes.AssignableToAny(
-                    typeof(IRequestHandler<,>),
-                    typeof(INotificationHandler<>)))
-                .AsImplementedInterfaces()
-                .WithScopedLifetime());
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Extensions).Assembly));
 
             return services;
         }

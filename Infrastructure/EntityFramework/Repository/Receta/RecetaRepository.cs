@@ -27,11 +27,6 @@ namespace Catalog.Infrastructure.EntityFramework.Repository.Recetas
                 .SingleOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public async Task<IReadOnlyCollection<Receta>> FindAllAsync()
-        {
-            return await _context.Receta.Include("_ingredientes").ToListAsync();
-        }
-
         public Task UpdateAsync(Receta receta)
         {
             _context.Receta.Update(receta);

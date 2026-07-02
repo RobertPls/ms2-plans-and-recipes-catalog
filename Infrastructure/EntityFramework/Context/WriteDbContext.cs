@@ -5,6 +5,7 @@ using Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Alimentos;
 using Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimentarios;
 using Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Recetas;
 using Microsoft.EntityFrameworkCore;
+using Shared.Core;
 
 namespace Catalog.Infrastructure.EntityFramework.Context
 {
@@ -33,7 +34,7 @@ namespace Catalog.Infrastructure.EntityFramework.Context
             var alimentoConfig = new AlimentoWriteConfig();
             modelBuilder.ApplyConfiguration<Alimento>(alimentoConfig);
 
-            modelBuilder.Ignore<Catalog.Shared.Core.DomainEvent>();
+            modelBuilder.Ignore<DomainEvent>();
         }
     }
 }

@@ -1,6 +1,7 @@
-using Catalog.Shared.Core;
+using Shared.Core;
+using MediatR;
 using Catalog.Domain.Event.Alimento;
-using Catalog.Shared.IntegrationEvents;
+using Shared.IntegrationEvents;
 using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.UseCase.DomainEventHandler

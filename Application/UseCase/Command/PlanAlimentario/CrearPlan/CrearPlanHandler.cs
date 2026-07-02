@@ -1,4 +1,5 @@
-using Catalog.Shared.Core;
+using Shared.Core;
+using MediatR;
 using Catalog.Domain;
 using Catalog.Domain.Factory.PlanAlimentario;
 using Catalog.Domain.Repository.PlanAlimentario;

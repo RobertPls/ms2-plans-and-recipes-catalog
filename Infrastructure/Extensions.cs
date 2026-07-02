@@ -1,5 +1,5 @@
 using Catalog.Application;
-using Catalog.Shared.Core;
+using Shared.Core;
 using Catalog.Domain.Repository.Alimento;
 using Catalog.Domain.Repository.PlanAlimentario;
 using Catalog.Domain.Repository.Receta;
@@ -9,6 +9,7 @@ using Catalog.Infrastructure.EntityFramework.Repository.Alimentos;
 using Catalog.Infrastructure.EntityFramework.Repository.PlanesAlimentarios;
 using Catalog.Infrastructure.EntityFramework.Repository.Recetas;
 using Catalog.Infrastructure.Seed;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,17 +34,9 @@ namespace Catalog.Infrastructure
             services.AddScoped<IRecetaRepository, RecetaRepository>();
             services.AddScoped<IAlimentoRepository, AlimentoRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IMediator, Mediator>();
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Extensions).Assembly));
 
             services.AddScoped<IDbInitializer, DbInitializer>();
-
-            services.Scan(scan => scan
-                .FromAssembliesOf(typeof(Extensions))
-                .AddClasses(classes => classes.AssignableToAny(
-                    typeof(IRequestHandler<,>),
-                    typeof(INotificationHandler<>)))
-                .AsImplementedInterfaces()
-                .WithScopedLifetime());
 
             return services;
         }

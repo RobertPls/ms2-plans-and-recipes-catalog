@@ -1,4 +1,4 @@
-using Catalog.Shared.Core;
+using Shared.Core;
 using Catalog.Domain.ValueObjects;
 using Catalog.Domain.Event.PlanAlimentario;
 

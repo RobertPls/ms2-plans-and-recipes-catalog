@@ -1,4 +1,5 @@
-using Catalog.Shared.Core;
+using Shared.Core;
+using MediatR;
 using Catalog.Domain.Factory.Receta;
 using Catalog.Domain.Repository.Receta;
 using Microsoft.Extensions.Logging;

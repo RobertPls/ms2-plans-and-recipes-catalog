@@ -1,4 +1,4 @@
-namespace Catalog.Shared.Core
+namespace Shared.Core
 {
     public interface IBussinessRule
     {
