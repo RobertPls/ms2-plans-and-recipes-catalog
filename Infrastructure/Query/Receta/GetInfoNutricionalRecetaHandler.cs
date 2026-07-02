@@ -1,0 +1,57 @@
+using Catalog.Application.Dto;
+using Catalog.Application.UseCase.Query.Receta;
+using Catalog.Domain.Repository.Alimento;
+using Catalog.Domain.Repository.Receta;
+using Catalog.Domain.ValueObjects;
+using Catalog.Shared.Core;
+using Microsoft.Extensions.Logging;
+
+namespace Catalog.Infrastructure.Query.Receta
+{
+    public class GetInfoNutricionalRecetaHandler : IRequestHandler<GetInfoNutricionalRecetaQuery, InfoNutricionalDto?>
+    {
+        private readonly IRecetaRepository _recetaRepository;
+        private readonly IAlimentoRepository _alimentoRepository;
+        private readonly ILogger<GetInfoNutricionalRecetaHandler> _logger;
+
+        public GetInfoNutricionalRecetaHandler(
+            IRecetaRepository recetaRepository,
+            IAlimentoRepository alimentoRepository,
+            ILogger<GetInfoNutricionalRecetaHandler> logger)
+        {
+            _recetaRepository = recetaRepository;
+            _alimentoRepository = alimentoRepository;
+            _logger = logger;
+        }
+
+        public async Task<InfoNutricionalDto?> Handle(GetInfoNutricionalRecetaQuery request, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var receta = await _recetaRepository.FindByIdAsync(RecetaId.From(request.RecetaId));
+                if (receta == null) return null;
+
+                var info = receta.CalcularInfoNutricionalTotal(id =>
+                {
+                    var task = _alimentoRepository.FindByIdAsync(id);
+                    task.Wait();
+                    return task.Result!;
+                });
+
+                return new InfoNutricionalDto
+                {
+                    Gramos = info.Gramos,
+                    Calorias = info.Calorias,
+                    Proteinas = info.Proteinas,
+                    Carbohidratos = info.Carbohidratos,
+                    Grasas = info.Grasas
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al calcular info nutricional de receta {RecetaId}", request.RecetaId);
+                return null;
+            }
+        }
+    }
+}
