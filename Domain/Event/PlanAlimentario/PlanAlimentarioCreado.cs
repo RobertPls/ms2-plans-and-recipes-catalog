@@ -9,16 +9,14 @@ namespace Catalog.Domain.Event.PlanAlimentario
         public string Nombre { get; }
         public string TipoDuracion { get; }
         public int DiasTotales { get; }
-        public DateTime FechaInicio { get; }
 
-        public PlanAlimentarioCreado(PlanId planId, string nombre, string tipoDuracion, int diasTotales, DateTime fechaInicio)
+        public PlanAlimentarioCreado(PlanId planId, string nombre, string tipoDuracion, int diasTotales)
             : base(DateTime.UtcNow)
         {
             PlanId = planId;
             Nombre = nombre;
             TipoDuracion = tipoDuracion;
             DiasTotales = diasTotales;
-            FechaInicio = fechaInicio;
         }
     }
 }

@@ -8,24 +8,20 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
     {
         public PlanName Nombre { get; private set; }
         public DuracionPlan Duracion { get; private set; }
-        public DateTime FechaInicio { get; private set; }
         private readonly ICollection<DiaDelPlan> _diasDelPlan;
 
         public IEnumerable<DiaDelPlan> DiasDelPlan => _diasDelPlan;
 
         private PlanAlimentario() { Nombre = null!; Duracion = null!; _diasDelPlan = null!; }
 
-        public PlanAlimentario(PlanName nombre, DuracionPlan duracion, DateTime fechaInicio)
+        public PlanAlimentario(PlanName nombre, DuracionPlan duracion)
         {
             if (!duracion.EsValida())
                 throw new BussinessRuleValidationException("Invalid plan duration");
-            if (!ValidarInicioPermitido(fechaInicio))
-                throw new BussinessRuleValidationException("Start date must be at least 1 day in the future");
 
             Id = PlanId.New();
             Nombre = nombre;
             Duracion = duracion;
-            FechaInicio = fechaInicio;
             _diasDelPlan = new List<DiaDelPlan>();
 
             for (int i = 1; i <= duracion.Dias(); i++)
@@ -33,7 +29,7 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
                 _diasDelPlan.Add(new DiaDelPlan(i));
             }
 
-            AddDomainEvent(new PlanAlimentarioCreado(Id, Nombre, Duracion.Tipo.ToString(), Duracion.Dias(), FechaInicio));
+            AddDomainEvent(new PlanAlimentarioCreado(Id, Nombre, Duracion.Tipo.ToString(), Duracion.Dias()));
         }
 
         public void AgregarTiempoDeComidaADia(int numDia, string nombre, int orden)
@@ -60,9 +56,5 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             AddDomainEvent(new RecetaAsignadaATiempo(Id, numDia, tId, recetaId, racion.Cantidad));
         }
 
-        public static bool ValidarInicioPermitido(DateTime fechaInicio)
-        {
-            return fechaInicio.Date > DateTime.UtcNow.Date;
-        }
     }
 }

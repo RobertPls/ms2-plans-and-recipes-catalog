@@ -6,9 +6,9 @@ namespace Catalog.Domain.Factory.PlanAlimentario
 
     public class PlanAlimentarioFactory : IPlanAlimentarioFactory
     {
-        public PlanAlimentario Create(string nombre, DuracionPlan duracion, DateTime fechaInicio)
+        public PlanAlimentario Create(string nombre, DuracionPlan duracion)
         {
-            return new PlanAlimentario(nombre, duracion, fechaInicio);
+            return new PlanAlimentario(nombre, duracion);
         }
     }
 }

@@ -45,9 +45,6 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimen
                 .HasColumnName("duracion")
                 .HasMaxLength(20);
 
-            builder.Property(x => x.FechaInicio)
-                .HasColumnName("fechaInicio");
-
             builder.HasMany(typeof(DiaDelPlan), "_diasDelPlan");
 
             builder.Ignore(x => x.DomainEvents);

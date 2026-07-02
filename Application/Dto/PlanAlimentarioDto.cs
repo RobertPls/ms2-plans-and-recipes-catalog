@@ -8,7 +8,6 @@ namespace Catalog.Application.Dto
         public string Nombre { get; set; } = null!;
         public string DuracionTipo { get; set; } = null!;
         public int DiasTotal { get; set; }
-        public DateTime FechaInicio { get; set; }
         public List<DiaDelPlanDto> Dias { get; set; } = new();
     }
 

@@ -31,8 +31,7 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                     Id = plan.Id.Value,
                     Nombre = plan.Nombre,
                     DuracionTipo = plan.Duracion.Tipo.ToString(),
-                    DiasTotal = plan.Duracion.Dias(),
-                    FechaInicio = plan.FechaInicio
+                    DiasTotal = plan.Duracion.Dias()
                 };
 
                 foreach (var dia in plan.DiasDelPlan)

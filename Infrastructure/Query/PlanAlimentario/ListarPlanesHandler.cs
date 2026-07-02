@@ -29,8 +29,7 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                     Id = p.Id,
                     Nombre = p.Nombre,
                     DuracionTipo = p.DuracionTipo,
-                    DiasTotal = p.DuracionTipo == "QUINCENAL" ? 15 : 30,
-                    FechaInicio = p.FechaInicio
+                    DiasTotal = p.DuracionTipo == "QUINCENAL" ? 15 : 30
                 }).AsQueryable();
 
                 return PagedList<PlanAlimentarioDto>.Create(dtoItems, request.Page, request.PageSize);

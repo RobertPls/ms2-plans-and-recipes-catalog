@@ -5,7 +5,6 @@ namespace Catalog.Infrastructure.EntityFramework.ReadModel.PlanAlimentario
         public Guid Id { get; set; }
         public string Nombre { get; set; } = null!;
         public string DuracionTipo { get; set; } = null!;
-        public DateTime FechaInicio { get; set; }
         public List<DiaDelPlanReadModel> DiasDelPlan { get; set; } = new();
     }
 

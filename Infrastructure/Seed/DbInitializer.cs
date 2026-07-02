@@ -208,7 +208,7 @@ namespace Catalog.Infrastructure.Seed
 
         private async Task CrearPlan(string nombre, TipoDuracion tipo, RecetaId[] desayunos, RecetaId[] almuerzos, RecetaId[] cenas)
         {
-            var plan = _planFactory.Create(nombre, new DuracionPlan(tipo), DateTime.UtcNow.AddDays(1));
+            var plan = _planFactory.Create(nombre, new DuracionPlan(tipo));
             var totalDias = tipo == TipoDuracion.QUINCENAL ? 15 : 30;
 
             for (int dia = 1; dia <= totalDias; dia++)

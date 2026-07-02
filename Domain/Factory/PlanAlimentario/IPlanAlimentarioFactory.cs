@@ -6,6 +6,6 @@ namespace Catalog.Domain.Factory.PlanAlimentario
 
     public interface IPlanAlimentarioFactory
     {
-        PlanAlimentario Create(string nombre, DuracionPlan duracion, DateTime fechaInicio);
+        PlanAlimentario Create(string nombre, DuracionPlan duracion);
     }
 }
