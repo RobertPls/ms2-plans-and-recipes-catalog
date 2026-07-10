@@ -36,6 +36,12 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Recetas
                 .HasColumnName("instrucciones")
                 .HasMaxLength(4000);
 
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted").HasDefaultValue(false);
+            builder.HasQueryFilter(x => !x.IsDeleted);
+
             builder.Ignore(x => x.DomainEvents);
             builder.Ignore(x => x.Ingredientes);
 

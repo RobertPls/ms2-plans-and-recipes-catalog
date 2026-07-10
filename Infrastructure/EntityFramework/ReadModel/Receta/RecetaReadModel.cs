@@ -6,6 +6,10 @@ namespace Catalog.Infrastructure.EntityFramework.ReadModel.Receta
         public string Nombre { get; set; } = null!;
         public string Instrucciones { get; set; } = null!;
         public List<IngredienteRecetaReadModel> Ingredientes { get; set; } = new();
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class IngredienteRecetaReadModel

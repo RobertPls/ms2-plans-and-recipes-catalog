@@ -36,5 +36,36 @@ namespace Catalog.Infrastructure.EntityFramework.Context
 
             modelBuilder.Ignore<DomainEvent>();
         }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var now = DateTime.UtcNow;
+
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.Entity is not IAuditableEntity entity)
+                    continue;
+
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entity.CreatedAt = now;
+                        entity.IsDeleted = false;
+                        break;
+
+                    case EntityState.Modified:
+                        entity.UpdatedAt = now;
+                        break;
+
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Modified;
+                        entity.IsDeleted = true;
+                        entity.DeletedAt = now;
+                        break;
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
     }
 }

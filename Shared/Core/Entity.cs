@@ -1,12 +1,17 @@
 namespace Shared.Core
 {
-    public abstract class Entity<TId>
+    public abstract class Entity<TId> : IAuditableEntity
     {
         public TId Id { get; protected set; } = default!;
 
         private readonly ICollection<DomainEvent> _domainEvents;
 
         public ICollection<DomainEvent> DomainEvents { get { return _domainEvents; } }
+
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public bool IsDeleted { get; set; }
 
         protected Entity()
         {

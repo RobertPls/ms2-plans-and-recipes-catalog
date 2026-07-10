@@ -51,6 +51,12 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Alimentos
                 info.Property(i => i.Grasas).HasColumnName("grasas").HasPrecision(12, 4);
             });
 
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted").HasDefaultValue(false);
+            builder.HasQueryFilter(x => !x.IsDeleted);
+
             builder.Ignore(x => x.DomainEvents);
         }
     }

@@ -15,6 +15,10 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.Receta
             builder.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(500);
             builder.Property(x => x.Instrucciones).HasColumnName("instrucciones").HasMaxLength(4000);
 
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted");
             builder.HasMany(x => x.Ingredientes).WithOne(x => x.Receta);
         }
 

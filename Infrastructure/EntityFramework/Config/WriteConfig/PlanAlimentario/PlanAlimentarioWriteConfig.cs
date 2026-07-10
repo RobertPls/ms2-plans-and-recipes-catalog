@@ -45,8 +45,13 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimen
                 .HasColumnName("duracion")
                 .HasMaxLength(20);
 
-            builder.HasMany(typeof(DiaDelPlan), "_diasDelPlan");
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted").HasDefaultValue(false);
+            builder.HasQueryFilter(x => !x.IsDeleted);
 
+            builder.HasMany(typeof(DiaDelPlan), "_diasDelPlan");
             builder.Ignore(x => x.DomainEvents);
             builder.Ignore(x => x.DiasDelPlan);
         }
@@ -55,12 +60,13 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimen
         {
             builder.ToTable("DiaDelPlan");
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.NumeroDia)
-                .HasColumnName("numeroDia");
-
+            builder.Property(x => x.NumeroDia).HasColumnName("numeroDia");
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted").HasDefaultValue(false);
+            builder.HasQueryFilter(x => !x.IsDeleted);
             builder.HasMany(typeof(TiempoDeComida), "_tiemposDeComida");
-
             builder.Ignore(x => x.DomainEvents);
             builder.Ignore(x => x.TiemposDeComida);
         }
@@ -69,14 +75,13 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimen
         {
             builder.ToTable("TiempoDeComida");
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Nombre)
-                .HasColumnName("nombre")
-                .HasMaxLength(200);
-
-            builder.Property(x => x.Orden)
-                .HasColumnName("orden");
-
+            builder.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(200);
+            builder.Property(x => x.Orden).HasColumnName("orden");
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted").HasDefaultValue(false);
+            builder.HasQueryFilter(x => !x.IsDeleted);
             builder.Ignore(x => x.DomainEvents);
             builder.Ignore(x => x.RecetasAsignadas);
 

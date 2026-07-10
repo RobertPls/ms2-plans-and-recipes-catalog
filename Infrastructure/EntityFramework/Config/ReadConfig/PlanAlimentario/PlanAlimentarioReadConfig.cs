@@ -17,6 +17,10 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.PlanAlimentar
             builder.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(500);
             builder.Property(x => x.DuracionTipo).HasColumnName("duracion").HasMaxLength(20);
 
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted");
             builder.HasMany(x => x.DiasDelPlan).WithOne(x => x.PlanAlimentario);
         }
 

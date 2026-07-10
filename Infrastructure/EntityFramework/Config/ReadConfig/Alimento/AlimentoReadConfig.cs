@@ -18,6 +18,10 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.Alimento
             builder.Property(x => x.Proteinas).HasColumnName("proteinas").HasPrecision(12, 4);
             builder.Property(x => x.Carbohidratos).HasColumnName("carbohidratos").HasPrecision(12, 4);
             builder.Property(x => x.Grasas).HasColumnName("grasas").HasPrecision(12, 4);
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted");
         }
     }
 }

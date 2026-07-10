@@ -6,6 +6,10 @@ namespace Catalog.Infrastructure.EntityFramework.ReadModel.PlanAlimentario
         public string Nombre { get; set; } = null!;
         public string DuracionTipo { get; set; } = null!;
         public List<DiaDelPlanReadModel> DiasDelPlan { get; set; } = new();
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class DiaDelPlanReadModel
