@@ -2,32 +2,68 @@ namespace Catalog.Application.Utils
 {
     public class Result
     {
-        public bool Success { get; set; }
-        public string? Message { get; set; }
+        public bool IsSuccess { get; protected set; }
+        public bool IsFailed => !IsSuccess;
+        public string? Message { get; protected set; }
+        public List<string> Errors { get; protected set; } = new();
 
-        public Result() { }
+        protected Result() { }
 
-        public Result(bool success, string? message = null)
+        public static Result Ok()
         {
-            Success = success;
-            Message = message;
+            return new Result { IsSuccess = true };
+        }
+
+        public static Result Ok(string message)
+        {
+            return new Result { IsSuccess = true, Message = message };
+        }
+
+        public static Result<T> Ok<T>(T value)
+        {
+            return new Result<T>(value) { IsSuccess = true };
+        }
+
+        public static Result<T> Ok<T>(T value, string message)
+        {
+            return new Result<T>(value) { IsSuccess = true, Message = message };
+        }
+
+        public static Result Fail(string message)
+        {
+            return new Result { IsSuccess = false, Message = message, Errors = new List<string> { message } };
+        }
+
+        public static Result Fail(string message, IEnumerable<string> errors)
+        {
+            return new Result { IsSuccess = false, Message = message, Errors = errors.ToList() };
+        }
+
+        public static Result<T> Fail<T>(string message)
+        {
+            return new Result<T>(default) { IsSuccess = false, Message = message, Errors = new List<string> { message } };
+        }
+
+        public static Result<T> Fail<T>(string message, IEnumerable<string> errors)
+        {
+            return new Result<T>(default) { IsSuccess = false, Message = message, Errors = errors.ToList() };
         }
     }
 
     public class Result<T> : Result
     {
-        public T? Value { get; set; }
+        public T? Value { get; protected set; }
 
         public Result() { }
 
-        public Result(bool success, string? message = null, T? value = default) : base(success, message)
+        public Result(T? value)
         {
             Value = value;
         }
 
-        public Result(T value) : base(true)
+        public static implicit operator Result<T>(T value)
         {
-            Value = value;
+            return Ok(value);
         }
     }
 }

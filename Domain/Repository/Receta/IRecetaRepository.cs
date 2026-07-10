@@ -1,6 +1,4 @@
 using Catalog.Domain.ValueObjects;
-}
-
 using Shared.Core;
 
 namespace Catalog.Domain.Repository.Receta
