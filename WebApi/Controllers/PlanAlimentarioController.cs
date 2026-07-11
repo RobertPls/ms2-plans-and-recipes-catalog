@@ -56,9 +56,6 @@ namespace Catalog.WebApi.Controllers
         [HttpGet("{planId:guid}")]
         public async Task<IActionResult> GetById(Guid planId)
         {
-            //var result = await _mediator.Send(new GetPlanByIdQuery(planId));
-            //if (result == null) return NotFound(ApiResponse.Fail("Plan alimentario no encontrado"));
-            //return Ok(ApiResponse.Ok(result, "Plan alimentario obtenido exitosamente"));
             var result = await _mediator.Send(new GetComposicionPlanQuery(planId));
             if (result == null) return NotFound(ApiResponse.Fail("Composición del plan no encontrada"));
             return Ok(ApiResponse.Ok(result, "Composición del plan obtenida exitosamente"));
@@ -71,13 +68,5 @@ namespace Catalog.WebApi.Controllers
             var result = await _mediator.Send(query);
             return Ok(ApiResponse.Ok(result, "Listado de planes obtenido exitosamente"));
         }
-
-        //[HttpGet("{planId:guid}/composicion")]
-        //public async Task<IActionResult> GetComposicion(Guid planId)
-        //{
-        //    var result = await _mediator.Send(new GetComposicionPlanQuery(planId));
-        //    if (result == null) return NotFound(ApiResponse.Fail("Composición del plan no encontrada"));
-        //    return Ok(ApiResponse.Ok(result, "Composición del plan obtenida exitosamente"));
-        //}
     }
 }

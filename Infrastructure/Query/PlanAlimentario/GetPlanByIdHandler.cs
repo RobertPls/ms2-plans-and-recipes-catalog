@@ -37,10 +37,10 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                     DiasTotal = plan.Duracion.Dias()
                 };
 
-                foreach (var dia in plan.DiasDelPlan)
+                foreach (var dia in plan.DiasDelPlan.OrderBy(d => d.NumeroDia))
                 {
                     var diaDto = new DiaDelPlanDto { NumeroDia = dia.NumeroDia };
-                    foreach (var tiempo in dia.TiemposDeComida)
+                    foreach (var tiempo in dia.TiemposDeComida.OrderBy(t => t.Orden))
                     {
                         var tDto = new TiempoDeComidaDto
                         {

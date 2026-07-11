@@ -35,13 +35,17 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                 var plan = await _planRepository.FindByIdAsync(PlanId.From(request.PlanId));
                 if (plan == null) return null;
 
-                var dto = new ComposicionPlanDto { PlanId = plan.Id.Value };
+                var dto = new ComposicionPlanDto
+                {
+                    PlanId = plan.Id.Value,
+                    Nombre = plan.Nombre
+                };
 
-                foreach (var dia in plan.DiasDelPlan)
+                foreach (var dia in plan.DiasDelPlan.OrderBy(d => d.NumeroDia))
                 {
                     var diaDto = new ComposicionDiaDto { NumeroDia = dia.NumeroDia };
 
-                    foreach (var tiempo in dia.TiemposDeComida)
+                    foreach (var tiempo in dia.TiemposDeComida.OrderBy(t => t.Orden))
                     {
                         var tiempoDto = new ComposicionTiempoDto
                         {

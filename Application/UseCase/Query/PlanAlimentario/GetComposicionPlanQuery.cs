@@ -13,6 +13,7 @@ namespace Catalog.Application.UseCase.Query.PlanAlimentario
     public class ComposicionPlanDto
     {
         public Guid PlanId { get; set; }
+        public string Nombre { get; set; } = null!;
         public List<ComposicionDiaDto> Dias { get; set; } = new();
     }
 
