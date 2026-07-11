@@ -23,7 +23,7 @@ namespace Catalog.Infrastructure.EntityFramework.Repository.PlanesAlimentarios
         public async Task<PlanAlimentario?> FindByIdAsync(PlanId id)
         {
             return await _context.PlanAlimentario
-                .Include("_diasDelPlan._tiemposDeComida._recetasAsignadas")
+                .Include("_diasDelPlan._tiemposDeComida")
                 .SingleOrDefaultAsync(x => x.Id.Equals(id));
         }
 

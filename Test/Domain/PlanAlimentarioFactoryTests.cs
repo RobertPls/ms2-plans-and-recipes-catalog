@@ -50,8 +50,8 @@ namespace Catalog.Tests.Domain
             var duracion = new DuracionPlan(TipoDuracion.QUINCENAL);
             var plan = _factory.Create("Plan Con Comidas", duracion, 3);
 
-            plan.AgregarTiempoDeComidaADia(1, "Desayuno", 1);
-            plan.AgregarTiempoDeComidaADia(1, "Almuerzo", 2);
+            plan.AgregarTiempoDeComidaADia(1, TipoTiempoComida.Desayuno);
+            plan.AgregarTiempoDeComidaADia(1, TipoTiempoComida.Almuerzo);
 
             var dia1 = plan.DiasDelPlan.First(d => d.NumeroDia == 1);
             Assert.Equal(2, dia1.TiemposDeComida.Count());
@@ -62,7 +62,7 @@ namespace Catalog.Tests.Domain
         {
             var duracion = new DuracionPlan(TipoDuracion.QUINCENAL);
             var plan = _factory.Create("Plan", duracion, 3);
-            plan.AgregarTiempoDeComidaADia(1, "Desayuno", 1);
+            plan.AgregarTiempoDeComidaADia(1, TipoTiempoComida.Desayuno);
 
             var recetaId = RecetaId.New();
             var racion = new Racion(2);

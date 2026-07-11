@@ -34,13 +34,13 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             AddDomainEvent(new PlanAlimentarioCreado(Id, Nombre, Duracion.Tipo.ToString(), Duracion.Dias(), comidasPorDia));
         }
 
-        public void AgregarTiempoDeComidaADia(int numDia, string nombre, int orden)
+        public void AgregarTiempoDeComidaADia(int numDia, TipoTiempoComida tipo)
         {
             var dia = _diasDelPlan.FirstOrDefault(d => d.NumeroDia == numDia);
             if (dia == null)
                 throw new BussinessRuleValidationException($"Día {numDia} no existe en el plan");
 
-            dia.AgregarTiempoDeComida(nombre, orden);
+            dia.AgregarTiempoDeComida(tipo);
         }
 
         public void AsignarRecetaATiempo(int numDia, Guid tId, RecetaId recetaId, Racion racion)

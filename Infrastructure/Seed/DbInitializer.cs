@@ -113,36 +113,36 @@ namespace Catalog.Infrastructure.Seed
         private async Task SeedRecetas()
         {
             var alimentos = await _context.Alimento.ToListAsync();
-            var resId = alimentos.First(a => a.Nombre == "Carne de Res").Id;
-            var polloId = alimentos.First(a => a.Nombre == "Pollo").Id;
-            var papaId = alimentos.First(a => a.Nombre == "Papa").Id;
-            var arrozId = alimentos.First(a => a.Nombre == "Arroz").Id;
-            var fideoId = alimentos.First(a => a.Nombre == "Fideo").Id;
-            var huevoId = alimentos.First(a => a.Nombre == "Huevo").Id;
-            var tomateId = alimentos.First(a => a.Nombre == "Tomate").Id;
-            var cebollaId = alimentos.First(a => a.Nombre == "Cebolla").Id;
-            var zanahoriaId = alimentos.First(a => a.Nombre == "Zanahoria").Id;
-            var arvejaId = alimentos.First(a => a.Nombre == "Arveja").Id;
-            var habaId = alimentos.First(a => a.Nombre == "Haba").Id;
-            var chocloId = alimentos.First(a => a.Nombre == "Choclo").Id;
-            var quesoId = alimentos.First(a => a.Nombre == "Queso").Id;
-            var panId = alimentos.First(a => a.Nombre == "Pan").Id;
-            var lecheId = alimentos.First(a => a.Nombre == "Leche").Id;
-            var platanoId = alimentos.First(a => a.Nombre == "Platano").Id;
-            var manzanaId = alimentos.First(a => a.Nombre == "Manzana").Id;
-            var naranjaId = alimentos.First(a => a.Nombre == "Naranja").Id;
-            var lechugaId = alimentos.First(a => a.Nombre == "Lechuga").Id;
-            var quinuaId = alimentos.First(a => a.Nombre == "Quinua").Id;
-            var maizMoradoId = alimentos.First(a => a.Nombre == "Maiz Morado").Id;
-            var azucarId = alimentos.First(a => a.Nombre == "Azucar").Id;
-            var canelaId = alimentos.First(a => a.Nombre == "Canela").Id;
-            var duraznoId = alimentos.First(a => a.Nombre == "Durazno").Id;
-            var harinaId = alimentos.First(a => a.Nombre == "Harina").Id;
-            var pasasId = alimentos.First(a => a.Nombre == "Pasas").Id;
-            var cocoId = alimentos.First(a => a.Nombre == "Coco").Id;
-            var locotoId = alimentos.First(a => a.Nombre == "Locoto").Id;
-            var salchichaId = alimentos.First(a => a.Nombre == "Salchicha").Id;
-            var camoteId = alimentos.First(a => a.Nombre == "Camote").Id;
+            var resId = alimentos.First(a => a.Nombre == "CARNE DE RES").Id;
+            var polloId = alimentos.First(a => a.Nombre == "POLLO").Id;
+            var papaId = alimentos.First(a => a.Nombre == "PAPA").Id;
+            var arrozId = alimentos.First(a => a.Nombre == "ARROZ").Id;
+            var fideoId = alimentos.First(a => a.Nombre == "FIDEO").Id;
+            var huevoId = alimentos.First(a => a.Nombre == "HUEVO").Id;
+            var tomateId = alimentos.First(a => a.Nombre == "TOMATE").Id;
+            var cebollaId = alimentos.First(a => a.Nombre == "CEBOLLA").Id;
+            var zanahoriaId = alimentos.First(a => a.Nombre == "ZANAHORIA").Id;
+            var arvejaId = alimentos.First(a => a.Nombre == "ARVEJA").Id;
+            var habaId = alimentos.First(a => a.Nombre == "HABA").Id;
+            var chocloId = alimentos.First(a => a.Nombre == "CHOCLO").Id;
+            var quesoId = alimentos.First(a => a.Nombre == "QUESO").Id;
+            var panId = alimentos.First(a => a.Nombre == "PAN").Id;
+            var lecheId = alimentos.First(a => a.Nombre == "LECHE").Id;
+            var platanoId = alimentos.First(a => a.Nombre == "PLATANO").Id;
+            var manzanaId = alimentos.First(a => a.Nombre == "MANZANA").Id;
+            var naranjaId = alimentos.First(a => a.Nombre == "NARANJA").Id;
+            var lechugaId = alimentos.First(a => a.Nombre == "LECHUGA").Id;
+            var quinuaId = alimentos.First(a => a.Nombre == "QUINUA").Id;
+            var maizMoradoId = alimentos.First(a => a.Nombre == "MAIZ MORADO").Id;
+            var azucarId = alimentos.First(a => a.Nombre == "AZUCAR").Id;
+            var canelaId = alimentos.First(a => a.Nombre == "CANELA").Id;
+            var duraznoId = alimentos.First(a => a.Nombre == "DURAZNO").Id;
+            var harinaId = alimentos.First(a => a.Nombre == "HARINA").Id;
+            var pasasId = alimentos.First(a => a.Nombre == "PASAS").Id;
+            var cocoId = alimentos.First(a => a.Nombre == "COCO").Id;
+            var locotoId = alimentos.First(a => a.Nombre == "LOCOTO").Id;
+            var salchichaId = alimentos.First(a => a.Nombre == "SALCHICHA").Id;
+            var camoteId = alimentos.First(a => a.Nombre == "CAMOTE").Id;
 
             var recetas = new List<Receta>();
 
@@ -381,8 +381,8 @@ namespace Catalog.Infrastructure.Seed
                 recetas.First(r => r.Nombre == "Papa Rellena de Queso").Id
             };
 
-            await CrearPlan("Plan Comidas Bolivianas 15 Dias", TipoDuracion.QUINCENAL, 3, desayunos, almuerzos, postres, cenas);
-            await CrearPlan("Plan Comidas Bolivianas 30 Dias", TipoDuracion.MENSUAL, 3, desayunos, almuerzos, postres, cenas);
+            await CrearPlan("Plan Comidas Bolivianas 15 Dias", TipoDuracion.QUINCENAL, 5, desayunos, almuerzos, postres, cenas);
+            await CrearPlan("Plan Comidas Bolivianas 30 Dias", TipoDuracion.MENSUAL, 5, desayunos, almuerzos, postres, cenas);
 
             await _unitOfWork.Commit();
             _logger.LogInformation("Seeded 2 planes alimentarios (15 and 30 days)");
@@ -395,19 +395,24 @@ namespace Catalog.Infrastructure.Seed
 
             for (int dia = 1; dia <= totalDias; dia++)
             {
-                plan.AgregarTiempoDeComidaADia(dia, "Desayuno", 1);
-                plan.AgregarTiempoDeComidaADia(dia, "Almuerzo", 2);
-                plan.AgregarTiempoDeComidaADia(dia, "Cena", 3);
+                foreach (var tt in Enum.GetValues<TipoTiempoComida>())
+                {
+                    plan.AgregarTiempoDeComidaADia(dia, tt);
+                }
 
                 var day = plan.DiasDelPlan.First(d => d.NumeroDia == dia);
 
-                var desayuno = day.TiemposDeComida.First(t => t.Orden == 1);
-                var almuerzo = day.TiemposDeComida.First(t => t.Orden == 2);
-                var cena = day.TiemposDeComida.First(t => t.Orden == 3);
+                var desayuno = day.TiemposDeComida.First(t => t.Orden == (int)TipoTiempoComida.Desayuno);
+                var mediaManana = day.TiemposDeComida.First(t => t.Orden == (int)TipoTiempoComida.MediaManana);
+                var almuerzo = day.TiemposDeComida.First(t => t.Orden == (int)TipoTiempoComida.Almuerzo);
+                var merienda = day.TiemposDeComida.First(t => t.Orden == (int)TipoTiempoComida.Merienda);
+                var cena = day.TiemposDeComida.First(t => t.Orden == (int)TipoTiempoComida.Cena);
 
                 plan.AsignarRecetaATiempo(dia, desayuno.Id, desayunos[(dia - 1) % desayunos.Length], new Racion(1));
+                plan.AsignarRecetaATiempo(dia, mediaManana.Id, desayunos[(dia - 1) % desayunos.Length], new Racion(1));
                 plan.AsignarRecetaATiempo(dia, almuerzo.Id, almuerzos[(dia - 1) % almuerzos.Length], new Racion(1));
                 plan.AsignarRecetaATiempo(dia, almuerzo.Id, postres[(dia - 1) % postres.Length], new Racion(1));
+                plan.AsignarRecetaATiempo(dia, merienda.Id, cenas[(dia - 1) % cenas.Length], new Racion(1));
                 plan.AsignarRecetaATiempo(dia, cena.Id, cenas[(dia - 1) % cenas.Length], new Racion(1));
             }
 

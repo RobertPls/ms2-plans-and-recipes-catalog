@@ -32,10 +32,14 @@ namespace Catalog.WebApi.Controllers
         }
 
         [HttpPost("{planId:guid}/dias/{numDia}/tiempos")]
-        public async Task<IActionResult> AgregarTiempoComida(Guid planId, int numDia, [FromBody] AgregarTiempoComidaCommand command)
+        public async Task<IActionResult> AgregarTiempoComida(Guid planId, int numDia, [FromBody] AgregarTiempoComidaRequest request)
         {
-            command.PlanId = planId;
-            command.NumDia = numDia;
+            var command = new AgregarTiempoComidaCommand
+            {
+                PlanId = planId,
+                NumDia = numDia,
+                Tipo = request.Tipo
+            };
             var result = await _mediator.Send(command);
             if (result.IsSuccess)
                 return Ok(ApiResponse.Ok(result.Message));

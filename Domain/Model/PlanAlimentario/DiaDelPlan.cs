@@ -1,3 +1,4 @@
+using Catalog.Domain.ValueObjects;
 using Shared.Core;
 
 namespace Catalog.Domain.Model.PlanesAlimentarios
@@ -15,12 +16,13 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             NumeroDia = numeroDia;
         }
 
-        internal void AgregarTiempoDeComida(string nombre, int orden)
+        internal void AgregarTiempoDeComida(TipoTiempoComida tipo)
         {
+            var orden = (int)tipo;
             if (_tiemposDeComida.Any(t => t.Orden == orden))
                 throw new BussinessRuleValidationException($"Ya existe un tiempo de comida con orden {orden} en el día {NumeroDia}");
 
-            var tiempo = new TiempoDeComida(nombre, orden);
+            var tiempo = new TiempoDeComida(tipo.ToDisplayName(), orden);
             _tiemposDeComida.Add(tiempo);
         }
 

@@ -31,7 +31,12 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComid
                 if (plan == null)
                     return Result.Fail("Plan alimentario no encontrado");
 
-                plan.AgregarTiempoDeComidaADia(request.NumDia, request.Nombre, request.Orden);
+                if (!Enum.IsDefined(typeof(TipoTiempoComida), request.Tipo))
+                    return Result.Fail($"Tipo de tiempo de comida inválido: {request.Tipo}. Valores válidos: 1=Desayuno, 2=Media Manana, 3=Almuerzo, 4=Merienda, 5=Cena");
+
+                var tipo = (TipoTiempoComida)request.Tipo;
+
+                plan.AgregarTiempoDeComidaADia(request.NumDia, tipo);
 
                 await _unitOfWork.Commit();
                 return Result.Ok("Tiempo de comida agregado exitosamente");
