@@ -30,6 +30,9 @@ namespace Catalog.Domain.Model.Recetas
 
         public void AgregarIngrediente(Guid alimentoId, Porcion porcion)
         {
+            if (_ingredientes.Any(i => i.AlimentoId == alimentoId))
+                throw new BussinessRuleValidationException($"El alimento {alimentoId} ya está agregado a la receta");
+
             var ingrediente = new IngredienteReceta(alimentoId, porcion);
             _ingredientes.Add(ingrediente);
 
