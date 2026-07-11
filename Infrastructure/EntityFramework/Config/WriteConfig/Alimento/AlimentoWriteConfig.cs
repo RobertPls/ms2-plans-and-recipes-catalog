@@ -30,7 +30,8 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Alimentos
 
             builder.Property(x => x.Id)
                 .HasConversion(alimentoIdConverter)
-                .HasColumnName("id");
+                .HasColumnName("id")
+                .ValueGeneratedNever();
 
             builder.Property(x => x.Nombre)
                 .HasConversion(alimentoNameConverter)

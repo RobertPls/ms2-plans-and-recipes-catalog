@@ -35,6 +35,15 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComid
                     return Result.Fail($"Tipo de tiempo de comida inválido: {request.Tipo}. Valores válidos: 1=Desayuno, 2=Media Manana, 3=Almuerzo, 4=Merienda, 5=Cena");
 
                 var tipo = (TipoTiempoComida)request.Tipo;
+                _logger.LogInformation("Adding meal: PlanId={PlanId}, Dia={Dia}, Tipo={Tipo}, Nombre={Nombre}, Orden={Orden}",
+                    plan.Id, request.NumDia, tipo, tipo.ToDisplayName(), (int)tipo);
+
+                var dia = plan.DiasDelPlan.FirstOrDefault(d => d.NumeroDia == request.NumDia);
+                if (dia == null)
+                    return Result.Fail($"Día {request.NumDia} no existe en el plan");
+
+                if (dia.TiemposDeComida.Any(t => t.Orden == (int)tipo))
+                    return Result.Fail($"Ya existe un tiempo de comida con orden {(int)tipo} en el día {request.NumDia}");
 
                 plan.AgregarTiempoDeComidaADia(request.NumDia, tipo);
 

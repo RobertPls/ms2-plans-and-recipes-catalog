@@ -25,7 +25,8 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Recetas
 
             builder.Property(x => x.Id)
                 .HasConversion(recetaIdConverter)
-                .HasColumnName("id");
+                .HasColumnName("id")
+                .ValueGeneratedNever();
 
             builder.Property(x => x.Nombre)
                 .HasConversion(recipeNameConverter)

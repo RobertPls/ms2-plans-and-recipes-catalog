@@ -28,6 +28,13 @@ namespace Catalog.Infrastructure.EntityFramework
                 await _mediator.Publish(@event);
             }
 
+            // 🔍 DEBUG TEMPORAL — borrar después
+            _context.ChangeTracker.DetectChanges();
+            foreach (var entry in _context.ChangeTracker.Entries())
+            {
+                Console.WriteLine($"[TRACKED] {entry.Entity.GetType().Name} | State={entry.State} | PK={string.Join(",", entry.Properties.Where(p => p.Metadata.IsPrimaryKey()).Select(p => p.CurrentValue))}");
+            }
+
             await _context.SaveChangesAsync();
         }
     }
