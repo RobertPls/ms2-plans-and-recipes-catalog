@@ -29,7 +29,8 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                     Id = p.Id,
                     Nombre = p.Nombre,
                     DuracionTipo = p.DuracionTipo,
-                    DiasTotal = p.DuracionTipo == "QUINCENAL" ? 15 : 30
+                    DiasTotal = p.DuracionTipo == "QUINCENAL" ? 15 : 30,
+                    ComidasPorDia = p.ComidasPorDia
                 }).ToList();
 
                 return Result.Ok<IEnumerable<PlanAlimentarioDto>>(dtoItems, "Listado de planes obtenido exitosamente");

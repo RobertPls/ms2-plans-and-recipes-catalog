@@ -34,14 +34,15 @@ namespace Catalog.Tests.Application
         {
             var command = new CrearPlanCommand
             {
-                Nombre = "Plan Test",
-                DuracionTipo = "QUINCENAL"
+                Nombre = "Plan Saludable",
+                DuracionTipo = "QUINCENAL",
+                ComidasPorDia = 3
             };
 
             var duracion = new DuracionPlan(TipoDuracion.QUINCENAL);
-            var plan = new PlanAlimentarioFactory().Create(command.Nombre, duracion);
+            var plan = new PlanAlimentarioFactory().Create(command.Nombre, duracion, 3);
 
-            _factoryMock.Setup(f => f.Create(It.IsAny<string>(), It.IsAny<DuracionPlan>()))
+            _factoryMock.Setup(f => f.Create(It.IsAny<string>(), It.IsAny<DuracionPlan>(), It.IsAny<int>()))
                 .Returns(plan!);
             _repoMock.Setup(r => r.CreateAsync(It.IsAny<PlanAlimentario>())).Returns(Task.CompletedTask);
 

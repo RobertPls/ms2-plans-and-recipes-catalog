@@ -1,7 +1,7 @@
 using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Command.Alimento.CrearAlimento;
-using Catalog.Application.UseCase.Command.Alimento.ActualizarInfoNutricional;
+using Catalog.Application.UseCase.Command.Alimento.ActualizarAlimento;
 using Catalog.Application.UseCase.Query.Alimento;
 using Catalog.WebApi.Utils;
 using Shared.Core;
@@ -59,8 +59,8 @@ namespace Catalog.WebApi.Controllers
             return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
 
-        [HttpPut("{alimentoId:guid}/info-nutricional")]
-        public async Task<IActionResult> ActualizarInfoNutricional(Guid alimentoId, [FromBody] ActualizarInfoNutricionalCommand command)
+        [HttpPut("{alimentoId:guid}")]
+        public async Task<IActionResult> Update(Guid alimentoId, [FromBody] ActualizarAlimentoCommand command)
         {
             command.AlimentoId = alimentoId;
             var result = await _mediator.Send(command);
@@ -68,5 +68,6 @@ namespace Catalog.WebApi.Controllers
                 return Ok(ApiResponse.Ok(result.Message));
             return NotFound(ApiResponse.Fail(result.Message, result.Errors));
         }
+
     }
 }

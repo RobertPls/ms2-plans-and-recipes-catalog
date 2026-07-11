@@ -29,5 +29,15 @@ namespace Catalog.Domain.Model.Alimentos
 
             AddDomainEvent(new AlimentoNutricionalActualizado(Id, anterior, info));
         }
+
+        public void Actualizar(AlimentoName nombre, CategoriaName categoria, InfoNutricional info)
+        {
+            Nombre = nombre;
+            Categoria = categoria;
+            var anterior = InfoNutricionalBase;
+            InfoNutricionalBase = info;
+
+            AddDomainEvent(new AlimentoNutricionalActualizado(Id, anterior, info));
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace Catalog.Tests.Domain
         public void Create_ValidPlan_ReturnsPlanWithCorrectProperties()
         {
             var duracion = new DuracionPlan(TipoDuracion.QUINCENAL);
-            var plan = _factory.Create("Plan Prueba", duracion);
+            var plan = _factory.Create("Plan Prueba", duracion, 3);
 
             Assert.Equal("Plan Prueba", plan.Nombre);
             Assert.Equal(TipoDuracion.QUINCENAL, plan.Duracion.Tipo);
@@ -31,7 +31,7 @@ namespace Catalog.Tests.Domain
         public void Create_MensualPlan_Creates30Days()
         {
             var duracion = new DuracionPlan(TipoDuracion.MENSUAL);
-            var plan = _factory.Create("Plan Mensual", duracion);
+            var plan = _factory.Create("Plan Mensual", duracion, 3);
 
             Assert.Equal(30, plan.DiasDelPlan.Count());
         }
@@ -41,14 +41,14 @@ namespace Catalog.Tests.Domain
         {
             var duracion = new DuracionPlan(TipoDuracion.QUINCENAL);
             Assert.Throws<BussinessRuleValidationException>(() =>
-                _factory.Create("", duracion));
+                _factory.Create("", duracion, 3));
         }
 
         [Fact]
         public void Create_AgregarTiempoComida_Works()
         {
             var duracion = new DuracionPlan(TipoDuracion.QUINCENAL);
-            var plan = _factory.Create("Plan Con Comidas", duracion);
+            var plan = _factory.Create("Plan Con Comidas", duracion, 3);
 
             plan.AgregarTiempoDeComidaADia(1, "Desayuno", 1);
             plan.AgregarTiempoDeComidaADia(1, "Almuerzo", 2);
@@ -61,7 +61,7 @@ namespace Catalog.Tests.Domain
         public void Create_AsignarRecetaATiempo_Works()
         {
             var duracion = new DuracionPlan(TipoDuracion.QUINCENAL);
-            var plan = _factory.Create("Plan", duracion);
+            var plan = _factory.Create("Plan", duracion, 3);
             plan.AgregarTiempoDeComidaADia(1, "Desayuno", 1);
 
             var recetaId = RecetaId.New();

@@ -31,12 +31,14 @@ namespace Catalog.Application.UseCase.Command.Alimento.CrearAlimento
         {
             try
             {
+                var nombre = request.Nombre.ToUpperInvariant();
+                var categoria = request.Categoria.ToUpperInvariant();
                 var info = new InfoNutricional(
                     request.Gramos, request.Calorias, request.Proteinas,
                     request.Carbohidratos, request.Grasas
                 );
 
-                var alimento = _factory.Create(request.Nombre, request.Categoria, info);
+                var alimento = _factory.Create(nombre, categoria, info);
 
                 await _repository.CreateAsync(alimento);
                 await _unitOfWork.Commit();

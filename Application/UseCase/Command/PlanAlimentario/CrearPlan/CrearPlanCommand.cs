@@ -8,5 +8,6 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan
     {
         public string Nombre { get; set; } = null!;
         public string DuracionTipo { get; set; } = null!;
+        public int ComidasPorDia { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace Catalog.Application.UseCase.DomainEventHandler
                 Nombre = notification.Nombre,
                 TipoDuracion = notification.TipoDuracion,
                 DiasTotales = notification.DiasTotales,
-                CantidadTiemposDeComidaPorDia = 0 
+                CantidadTiemposDeComidaPorDia = notification.ComidasPorDia 
             };
 
             _logger.LogInformation(

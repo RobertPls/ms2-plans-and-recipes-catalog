@@ -1,7 +1,6 @@
 using Catalog.Infrastructure;
 using Catalog.Infrastructure.EntityFramework.Context;
 using Catalog.Infrastructure.Seed;
-using Catalog.WebApi.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -34,8 +33,6 @@ namespace Catalog.WebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseExceptionMiddleware();
-
             if (env.IsDevelopment())
             {
                 app.UseSwagger();

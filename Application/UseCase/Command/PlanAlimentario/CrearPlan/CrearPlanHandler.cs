@@ -36,7 +36,7 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan
                     Enum.Parse<TipoDuracion>(request.DuracionTipo)
                 );
 
-                var plan = _factory.Create(request.Nombre, duracion);
+                var plan = _factory.Create(request.Nombre, duracion, request.ComidasPorDia);
 
                 await _repository.CreateAsync(plan);
                 await _unitOfWork.Commit();

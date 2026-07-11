@@ -8,13 +8,14 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
     {
         public PlanName Nombre { get; private set; }
         public DuracionPlan Duracion { get; private set; }
+        public int ComidasPorDia { get; private set; }
         private readonly ICollection<DiaDelPlan> _diasDelPlan;
 
         public IEnumerable<DiaDelPlan> DiasDelPlan => _diasDelPlan;
 
         private PlanAlimentario() { Nombre = null!; Duracion = null!; _diasDelPlan = null!; }
 
-        public PlanAlimentario(PlanName nombre, DuracionPlan duracion)
+        public PlanAlimentario(PlanName nombre, DuracionPlan duracion, int comidasPorDia)
         {
             if (!duracion.EsValida())
                 throw new BussinessRuleValidationException("Invalid plan duration");
@@ -22,6 +23,7 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             Id = PlanId.New();
             Nombre = nombre;
             Duracion = duracion;
+            ComidasPorDia = comidasPorDia;
             _diasDelPlan = new List<DiaDelPlan>();
 
             for (int i = 1; i <= duracion.Dias(); i++)
@@ -29,7 +31,7 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
                 _diasDelPlan.Add(new DiaDelPlan(i));
             }
 
-            AddDomainEvent(new PlanAlimentarioCreado(Id, Nombre, Duracion.Tipo.ToString(), Duracion.Dias()));
+            AddDomainEvent(new PlanAlimentarioCreado(Id, Nombre, Duracion.Tipo.ToString(), Duracion.Dias(), comidasPorDia));
         }
 
         public void AgregarTiempoDeComidaADia(int numDia, string nombre, int orden)

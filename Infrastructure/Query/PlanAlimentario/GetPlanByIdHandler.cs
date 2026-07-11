@@ -36,7 +36,8 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                     Id = plan.Id.Value,
                     Nombre = plan.Nombre,
                     DuracionTipo = plan.Duracion.Tipo.ToString(),
-                    DiasTotal = plan.Duracion.Dias()
+                    DiasTotal = plan.Duracion.Dias(),
+                    ComidasPorDia = plan.ComidasPorDia
                 };
 
                 foreach (var dia in plan.DiasDelPlan.OrderBy(d => d.NumeroDia))

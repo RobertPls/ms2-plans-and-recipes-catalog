@@ -45,6 +45,8 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimen
                 .HasColumnName("duracion")
                 .HasMaxLength(20);
 
+            builder.Property(x => x.ComidasPorDia).HasColumnName("comidasPorDia");
+
             builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
             builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
             builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
