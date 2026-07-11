@@ -16,18 +16,12 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimen
             builder.ToTable("PlanAlimentario");
             builder.HasKey(x => x.Id);
 
-            var planIdConverter = new ValueConverter<PlanId, Guid>(
-                id => id.Value,
-                guid => PlanId.From(guid)
-            );
-
             var planNameConverter = new ValueConverter<PlanName, string>(
                 name => name.Name,
                 s => (PlanName)s
             );
 
             builder.Property(x => x.Id)
-                .HasConversion(planIdConverter)
                 .HasColumnName("id")
                 .ValueGeneratedNever();
 
@@ -91,15 +85,9 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimen
 
             builder.OwnsMany<AsignacionReceta>("_recetasAsignadas", asig =>
             {
-                var recetaIdConverter = new ValueConverter<RecetaId, Guid>(
-                    id => id.Value,
-                    guid => RecetaId.From(guid)
-                );
-
                 asig.Property<Guid>("Id").ValueGeneratedOnAdd();
 
                 asig.Property(x => x.RecetaId)
-                    .HasConversion(recetaIdConverter)
                     .HasColumnName("recetaId");
 
                 asig.OwnsOne(x => x.Racion, racion =>

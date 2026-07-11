@@ -5,7 +5,7 @@ using Catalog.Domain.Event.Receta;
 
 namespace Catalog.Domain.Model.Recetas
 {
-    public class Receta : AggregateRoot<RecetaId>
+    public class Receta : AggregateRoot<Guid>
     {
         public RecipeName Nombre { get; private set; }
         public string Instrucciones { get; private set; }
@@ -20,7 +20,7 @@ namespace Catalog.Domain.Model.Recetas
             if (string.IsNullOrWhiteSpace(instrucciones))
                 throw new BussinessRuleValidationException("Recipe instructions cannot be empty");
 
-            Id = RecetaId.New();
+            Id = Guid.NewGuid();
             Nombre = nombre;
             Instrucciones = instrucciones;
             _ingredientes = new List<IngredienteReceta>();
@@ -28,7 +28,7 @@ namespace Catalog.Domain.Model.Recetas
             AddDomainEvent(new RecetaCreada(Id, Nombre));
         }
 
-        public void AgregarIngrediente(AlimentoId alimentoId, Porcion porcion)
+        public void AgregarIngrediente(Guid alimentoId, Porcion porcion)
         {
             var ingrediente = new IngredienteReceta(alimentoId, porcion);
             _ingredientes.Add(ingrediente);
@@ -36,18 +36,18 @@ namespace Catalog.Domain.Model.Recetas
             AddDomainEvent(new IngredienteAgregadoAReceta(Id, alimentoId, porcion.Cantidad));
         }
 
-        public void RemoverIngrediente(AlimentoId alimentoId)
+        public void RemoverIngrediente(Guid alimentoId)
         {
             var ingrediente = _ingredientes.FirstOrDefault(i => i.AlimentoId == alimentoId);
             if (ingrediente == null)
-                throw new BussinessRuleValidationException($"El ingrediente {alimentoId.Value} no existe en la receta");
+                throw new BussinessRuleValidationException($"El ingrediente {alimentoId} no existe en la receta");
 
             _ingredientes.Remove(ingrediente);
 
             AddDomainEvent(new IngredienteRemovidoDeReceta(Id, alimentoId, ingrediente.Porcion.Cantidad));
         }
 
-        public InfoNutricional CalcularInfoNutricionalTotal(Func<AlimentoId, Alimento> obtenerAlimento)
+        public InfoNutricional CalcularInfoNutricionalTotal(Func<Guid, Alimento> obtenerAlimento)
         {
             decimal totalCalorias = 0, totalProteinas = 0, totalCarbos = 0, totalGrasas = 0;
 

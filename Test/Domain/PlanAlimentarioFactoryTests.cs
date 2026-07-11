@@ -64,7 +64,7 @@ namespace Catalog.Tests.Domain
             var plan = _factory.Create("Plan", duracion, 3);
             plan.AgregarTiempoDeComidaADia(1, TipoTiempoComida.Desayuno);
 
-            var recetaId = RecetaId.New();
+            var recetaId = Guid.NewGuid();
             var racion = new Racion(2);
             var dia1 = plan.DiasDelPlan.First(d => d.NumeroDia == 1);
             var tId = dia1.TiemposDeComida.First().Id;

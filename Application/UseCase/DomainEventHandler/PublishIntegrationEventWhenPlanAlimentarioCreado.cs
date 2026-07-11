@@ -21,7 +21,7 @@ namespace Catalog.Application.UseCase.DomainEventHandler
         {
             var integrationEvent = new CatalogoV1PlanPublicado
             {
-                PlanId = notification.PlanId.Value,
+                PlanId = notification.PlanId,
                 Nombre = notification.Nombre,
                 TipoDuracion = notification.TipoDuracion,
                 DiasTotales = notification.DiasTotales,

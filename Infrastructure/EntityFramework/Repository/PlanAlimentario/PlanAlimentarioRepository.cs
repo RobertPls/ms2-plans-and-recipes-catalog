@@ -1,6 +1,5 @@
 using Catalog.Domain.Model.PlanesAlimentarios;
 using Catalog.Domain.Repository.PlanAlimentario;
-using Catalog.Domain.ValueObjects;
 using Catalog.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,11 +19,11 @@ namespace Catalog.Infrastructure.EntityFramework.Repository.PlanesAlimentarios
             await _context.PlanAlimentario.AddAsync(plan);
         }
 
-        public async Task<PlanAlimentario?> FindByIdAsync(PlanId id)
+        public async Task<PlanAlimentario?> FindByIdAsync(Guid id)
         {
             return await _context.PlanAlimentario
                 .Include("_diasDelPlan._tiemposDeComida")
-                .SingleOrDefaultAsync(x => x.Id.Equals(id));
+                .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public Task UpdateAsync(PlanAlimentario plan)

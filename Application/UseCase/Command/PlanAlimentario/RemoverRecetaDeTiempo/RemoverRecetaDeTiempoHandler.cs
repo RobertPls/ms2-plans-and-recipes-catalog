@@ -2,7 +2,6 @@ using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 using Catalog.Domain.Repository.PlanAlimentario;
-using Catalog.Domain.ValueObjects;
 using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.UseCase.Command.PlanAlimentario.RemoverRecetaDeTiempo
@@ -27,11 +26,11 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.RemoverRecetaDeTie
         {
             try
             {
-                var plan = await _repository.FindByIdAsync(PlanId.From(request.PlanId));
+                var plan = await _repository.FindByIdAsync(request.PlanId);
                 if (plan == null)
                     return Result.Fail("Plan alimentario no encontrado");
 
-                plan.RemoverRecetaDeTiempo(request.TiempoComidaId, RecetaId.From(request.RecetaId));
+                plan.RemoverRecetaDeTiempo(request.TiempoComidaId, request.RecetaId);
 
                 await _unitOfWork.Commit();
                 return Result.Ok("Receta removida del tiempo de comida exitosamente");

@@ -13,18 +13,12 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Recetas
             builder.ToTable("Receta");
             builder.HasKey(x => x.Id);
 
-            var recetaIdConverter = new ValueConverter<RecetaId, Guid>(
-                id => id.Value,
-                guid => RecetaId.From(guid)
-            );
-
             var recipeNameConverter = new ValueConverter<RecipeName, string>(
                 name => name.Name,
                 s => (RecipeName)s
             );
 
             builder.Property(x => x.Id)
-                .HasConversion(recetaIdConverter)
                 .HasColumnName("id")
                 .ValueGeneratedNever();
 
@@ -48,15 +42,9 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Recetas
 
             builder.OwnsMany<IngredienteReceta>("_ingredientes", ing =>
             {
-                var alimentoIdConverter = new ValueConverter<AlimentoId, Guid>(
-                    id => id.Value,
-                    guid => AlimentoId.From(guid)
-                );
-
                 ing.Property<Guid>("Id").ValueGeneratedOnAdd();
 
                 ing.Property(x => x.AlimentoId)
-                    .HasConversion(alimentoIdConverter)
                     .HasColumnName("alimentoId");
 
                 ing.OwnsOne(x => x.Porcion, porcion =>

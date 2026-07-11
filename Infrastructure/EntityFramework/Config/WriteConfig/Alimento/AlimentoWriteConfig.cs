@@ -13,11 +13,6 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Alimentos
             builder.ToTable("Alimento");
             builder.HasKey(x => x.Id);
 
-            var alimentoIdConverter = new ValueConverter<AlimentoId, Guid>(
-                id => id.Value,
-                guid => AlimentoId.From(guid)
-            );
-
             var alimentoNameConverter = new ValueConverter<AlimentoName, string>(
                 name => name.Name,
                 s => (AlimentoName)s
@@ -29,7 +24,6 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Alimentos
             );
 
             builder.Property(x => x.Id)
-                .HasConversion(alimentoIdConverter)
                 .HasColumnName("id")
                 .ValueGeneratedNever();
 

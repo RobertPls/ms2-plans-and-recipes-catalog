@@ -3,7 +3,6 @@ using Catalog.Application.UseCase.Query.Receta;
 using Catalog.Application.Utils;
 using Catalog.Domain.Repository.Alimento;
 using Catalog.Domain.Repository.Receta;
-using Catalog.Domain.ValueObjects;
 using Shared.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -30,7 +29,7 @@ namespace Catalog.Infrastructure.Query.Receta
         {
             try
             {
-                var receta = await _recetaRepository.FindByIdAsync(RecetaId.From(request.RecetaId));
+                var receta = await _recetaRepository.FindByIdAsync(request.RecetaId);
                 if (receta == null)
                     return Result.Fail<InfoNutricionalDto>("Receta no encontrada");
 

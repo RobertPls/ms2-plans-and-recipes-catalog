@@ -35,7 +35,7 @@ namespace Catalog.Application.UseCase.Command.Receta.CrearReceta
                 await _repository.CreateAsync(receta);
                 await _unitOfWork.Commit();
 
-                return Result<Guid>.Ok(receta.Id.Value, "Receta creada exitosamente");
+                return Result<Guid>.Ok(receta.Id, "Receta creada exitosamente");
             }
             catch (Exception ex)
             {

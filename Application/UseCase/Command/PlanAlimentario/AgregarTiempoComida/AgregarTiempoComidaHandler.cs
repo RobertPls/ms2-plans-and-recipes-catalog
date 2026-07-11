@@ -27,7 +27,7 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComid
         {
             try
             {
-                var plan = await _repository.FindByIdAsync(PlanId.From(request.PlanId));
+                var plan = await _repository.FindByIdAsync(request.PlanId);
                 if (plan == null)
                     return Result.Fail("Plan alimentario no encontrado");
 

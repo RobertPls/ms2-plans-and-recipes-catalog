@@ -41,7 +41,7 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan
                 await _repository.CreateAsync(plan);
                 await _unitOfWork.Commit();
 
-                return Result<Guid>.Ok(plan.Id.Value, "Plan alimentario creado exitosamente");
+                return Result<Guid>.Ok(plan.Id, "Plan alimentario creado exitosamente");
             }
             catch (Exception ex)
             {

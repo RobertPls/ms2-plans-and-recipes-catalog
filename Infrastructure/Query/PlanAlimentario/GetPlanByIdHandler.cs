@@ -3,7 +3,6 @@ using Catalog.Application.UseCase.Query.PlanAlimentario;
 using Catalog.Application.Utils;
 using Catalog.Domain.Repository.PlanAlimentario;
 using Catalog.Domain.Repository.Receta;
-using Catalog.Domain.ValueObjects;
 using Shared.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -27,13 +26,13 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
         {
             try
             {
-                var plan = await _repository.FindByIdAsync(PlanId.From(request.Id));
+                var plan = await _repository.FindByIdAsync(request.Id);
                 if (plan == null)
                     return Result.Fail<PlanAlimentarioDto>("Plan alimentario no encontrado");
 
                 var dto = new PlanAlimentarioDto
                 {
-                    Id = plan.Id.Value,
+                    Id = plan.Id,
                     Nombre = plan.Nombre,
                     DuracionTipo = plan.Duracion.Tipo.ToString(),
                     DiasTotal = plan.Duracion.Dias(),
@@ -55,7 +54,7 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                             var receta = await _recetaRepository.FindByIdAsync(asig.RecetaId);
                             tDto.Recetas.Add(new RecetaAsignadaDto
                             {
-                                RecetaId = asig.RecetaId.Value,
+                                RecetaId = asig.RecetaId,
                                 NombreReceta = receta?.Nombre ?? "Unknown",
                                 Racion = asig.Racion.Cantidad
                             });

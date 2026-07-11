@@ -1,17 +1,16 @@
 using Shared.Core;
-using Catalog.Domain.ValueObjects;
 
 namespace Catalog.Domain.Event.PlanAlimentario
 {
     public record RecetaAsignadaATiempo : DomainEvent
     {
-        public PlanId PlanId { get; }
+        public Guid PlanId { get; }
         public int NumeroDia { get; }
         public Guid TiempoDeComidaId { get; }
-        public RecetaId RecetaId { get; }
+        public Guid RecetaId { get; }
         public decimal RacionCantidad { get; }
 
-        public RecetaAsignadaATiempo(PlanId planId, int numeroDia, Guid tiempoDeComidaId, RecetaId recetaId, decimal racionCantidad)
+        public RecetaAsignadaATiempo(Guid planId, int numeroDia, Guid tiempoDeComidaId, Guid recetaId, decimal racionCantidad)
             : base(DateTime.UtcNow)
         {
             PlanId = planId;

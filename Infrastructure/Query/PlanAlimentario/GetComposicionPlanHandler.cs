@@ -3,7 +3,6 @@ using Catalog.Application.Utils;
 using Catalog.Domain.Repository.Alimento;
 using Catalog.Domain.Repository.PlanAlimentario;
 using Catalog.Domain.Repository.Receta;
-using Catalog.Domain.ValueObjects;
 using Shared.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -33,13 +32,13 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
         {
             try
             {
-                var plan = await _planRepository.FindByIdAsync(PlanId.From(request.PlanId));
+                var plan = await _planRepository.FindByIdAsync(request.PlanId);
                 if (plan == null)
                     return Result.Fail<ComposicionPlanDto>("Plan alimentario no encontrado");
 
                 var dto = new ComposicionPlanDto
                 {
-                    PlanId = plan.Id.Value,
+                    PlanId = plan.Id,
                     Nombre = plan.Nombre
                 };
 
@@ -63,7 +62,7 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
 
                             var recetaDto = new ComposicionRecetaDto
                             {
-                                RecetaId = receta.Id.Value,
+                                RecetaId = receta.Id,
                                 NombreReceta = receta.Nombre,
                                 Racion = new RacionDto { Cantidad = asig.Racion.Cantidad }
                             };
@@ -73,7 +72,7 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                                 var alimento = await _alimentoRepository.FindByIdAsync(ing.AlimentoId);
                                     recetaDto.Ingredientes.Add(new ComposicionIngredienteDto
                                     {
-                                        AlimentoId = ing.AlimentoId.Value,
+                                        AlimentoId = ing.AlimentoId,
                                         NombreAlimento = alimento?.Nombre ?? "Unknown",
                                         Porcion = new PorcionDto
                                         {

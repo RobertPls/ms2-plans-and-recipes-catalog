@@ -4,7 +4,7 @@ using Catalog.Domain.Event.PlanAlimentario;
 
 namespace Catalog.Domain.Model.PlanesAlimentarios
 {
-    public class PlanAlimentario : AggregateRoot<PlanId>
+    public class PlanAlimentario : AggregateRoot<Guid>
     {
         public PlanName Nombre { get; private set; }
         public DuracionPlan Duracion { get; private set; }
@@ -20,7 +20,7 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             if (!duracion.EsValida())
                 throw new BussinessRuleValidationException("Invalid plan duration");
 
-            Id = PlanId.New();
+            Id = Guid.NewGuid();
             Nombre = nombre;
             Duracion = duracion;
             ComidasPorDia = comidasPorDia;
@@ -43,7 +43,7 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             dia.AgregarTiempoDeComida(tipo);
         }
 
-        public void AsignarRecetaATiempo(int numDia, Guid tId, RecetaId recetaId, Racion racion)
+        public void AsignarRecetaATiempo(int numDia, Guid tId, Guid recetaId, Racion racion)
         {
             var dia = _diasDelPlan.FirstOrDefault(d => d.NumeroDia == numDia);
             if (dia == null)
@@ -58,7 +58,7 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             AddDomainEvent(new RecetaAsignadaATiempo(Id, numDia, tId, recetaId, racion.Cantidad));
         }
 
-        public void AsignarRecetaATiempo(Guid tId, RecetaId recetaId, Racion racion)
+        public void AsignarRecetaATiempo(Guid tId, Guid recetaId, Racion racion)
         {
             foreach (var dia in _diasDelPlan)
             {
@@ -74,7 +74,7 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             throw new BussinessRuleValidationException($"Tiempo de comida {tId} no existe en el plan");
         }
 
-        public void RemoverRecetaDeTiempo(Guid tId, RecetaId recetaId)
+        public void RemoverRecetaDeTiempo(Guid tId, Guid recetaId)
         {
             foreach (var dia in _diasDelPlan)
             {

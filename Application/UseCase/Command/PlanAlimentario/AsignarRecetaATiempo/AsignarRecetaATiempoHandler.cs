@@ -27,7 +27,7 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiem
         {
             try
             {
-                var plan = await _repository.FindByIdAsync(PlanId.From(request.PlanId));
+                var plan = await _repository.FindByIdAsync(request.PlanId);
                 if (plan == null)
                     return Result.Fail("Plan alimentario no encontrado");
 
@@ -35,7 +35,7 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiem
                 {
                     plan.AsignarRecetaATiempo(
                         request.TiempoComidaId,
-                        RecetaId.From(item.RecetaId),
+                        item.RecetaId,
                         new Racion(item.RacionCantidad)
                     );
                 }

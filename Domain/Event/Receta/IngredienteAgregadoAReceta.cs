@@ -1,15 +1,14 @@
 using Shared.Core;
-using Catalog.Domain.ValueObjects;
 
 namespace Catalog.Domain.Event.Receta
 {
     public record IngredienteAgregadoAReceta : DomainEvent
     {
-        public RecetaId RecetaId { get; }
-        public AlimentoId AlimentoId { get; }
+        public Guid RecetaId { get; }
+        public Guid AlimentoId { get; }
         public decimal PorcionCantidad { get; }
 
-        public IngredienteAgregadoAReceta(RecetaId recetaId, AlimentoId alimentoId, decimal porcionCantidad)
+        public IngredienteAgregadoAReceta(Guid recetaId, Guid alimentoId, decimal porcionCantidad)
             : base(DateTime.UtcNow)
         {
             RecetaId = recetaId;

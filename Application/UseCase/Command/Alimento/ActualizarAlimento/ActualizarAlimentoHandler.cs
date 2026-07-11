@@ -27,7 +27,7 @@ namespace Catalog.Application.UseCase.Command.Alimento.ActualizarAlimento
         {
             try
             {
-                var alimento = await _repository.FindByIdAsync(AlimentoId.From(request.AlimentoId));
+                var alimento = await _repository.FindByIdAsync(request.AlimentoId);
                 if (alimento == null)
                     return Result.Fail("Alimento no encontrado");
 

@@ -388,7 +388,7 @@ namespace Catalog.Infrastructure.Seed
             _logger.LogInformation("Seeded 2 planes alimentarios (15 and 30 days)");
         }
 
-        private async Task CrearPlan(string nombre, TipoDuracion tipo, int comidasPorDia, RecetaId[] desayunos, RecetaId[] almuerzos, RecetaId[] postres, RecetaId[] cenas)
+        private async Task CrearPlan(string nombre, TipoDuracion tipo, int comidasPorDia, Guid[] desayunos, Guid[] almuerzos, Guid[] postres, Guid[] cenas)
         {
             var plan = _planFactory.Create(nombre, new DuracionPlan(tipo), comidasPorDia);
             var totalDias = tipo == TipoDuracion.QUINCENAL ? 15 : 30;

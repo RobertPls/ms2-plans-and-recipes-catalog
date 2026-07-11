@@ -4,7 +4,7 @@ using Catalog.Domain.Event.Alimento;
 
 namespace Catalog.Domain.Model.Alimentos
 {
-    public class Alimento : AggregateRoot<AlimentoId>
+    public class Alimento : AggregateRoot<Guid>
     {
         public AlimentoName Nombre { get; private set; }
         public CategoriaName Categoria { get; private set; }
@@ -15,7 +15,7 @@ namespace Catalog.Domain.Model.Alimentos
 
         public Alimento(AlimentoName nombre, CategoriaName categoria, UnidadMedida unidadMedida, InfoNutricional infoNutricionalBase)
         {
-            Id = AlimentoId.New();
+            Id = Guid.NewGuid();
             Nombre = nombre;
             Categoria = categoria;
             UnidadMedida = unidadMedida;

@@ -21,7 +21,7 @@ namespace Catalog.Application.UseCase.DomainEventHandler
         {
             var integrationEvent = new CatalogoV1AlimentoNutricionalActualizado
             {
-                AlimentoId = notification.AlimentoId.Value,
+                AlimentoId = notification.AlimentoId,
                 CaloriasAnterior = (double)notification.InfoNutricionalAnterior.Calorias,
                 ProteinasAnterior = (double)notification.InfoNutricionalAnterior.Proteinas,
                 GrasasAnterior = (double)notification.InfoNutricionalAnterior.Grasas,

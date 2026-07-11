@@ -5,12 +5,12 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
 {
     public record AsignacionReceta : ValueObject
     {
-        public RecetaId RecetaId { get; }
+        public Guid RecetaId { get; }
         public Racion Racion { get; }
 
-        private AsignacionReceta() { RecetaId = default!; Racion = default!; }
+        private AsignacionReceta() { Racion = default!; }
 
-        public AsignacionReceta(RecetaId recetaId, Racion racion)
+        public AsignacionReceta(Guid recetaId, Racion racion)
         {
             RecetaId = recetaId;
             Racion = racion;

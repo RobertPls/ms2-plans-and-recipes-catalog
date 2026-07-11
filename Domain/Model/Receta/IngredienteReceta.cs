@@ -5,12 +5,12 @@ namespace Catalog.Domain.Model.Recetas
 {
     public record IngredienteReceta : ValueObject
     {
-        public AlimentoId AlimentoId { get; }
+        public Guid AlimentoId { get; }
         public Porcion Porcion { get; }
 
-        private IngredienteReceta() { AlimentoId = default!; Porcion = default!; }
+        private IngredienteReceta() { Porcion = default!; }
 
-        public IngredienteReceta(AlimentoId alimentoId, Porcion porcion)
+        public IngredienteReceta(Guid alimentoId, Porcion porcion)
         {
             AlimentoId = alimentoId;
             Porcion = porcion;

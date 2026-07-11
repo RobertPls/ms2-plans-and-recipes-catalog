@@ -1,6 +1,5 @@
 using Catalog.Domain.Model.Recetas;
 using Catalog.Domain.Repository.Receta;
-using Catalog.Domain.ValueObjects;
 using Catalog.Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,11 +19,11 @@ namespace Catalog.Infrastructure.EntityFramework.Repository.Recetas
             await _context.Receta.AddAsync(receta);
         }
 
-        public async Task<Receta?> FindByIdAsync(RecetaId id)
+        public async Task<Receta?> FindByIdAsync(Guid id)
         {
             return await _context.Receta
                 .Include("_ingredientes")
-                .SingleOrDefaultAsync(x => x.Id.Equals(id));
+                .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public Task UpdateAsync(Receta receta)

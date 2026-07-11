@@ -18,20 +18,20 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             Orden = orden;
         }
 
-        internal void AsignarReceta(RecetaId recetaId, Racion racion)
+        internal void AsignarReceta(Guid recetaId, Racion racion)
         {
             if (_recetasAsignadas.Any(r => r.RecetaId == recetaId))
-                throw new BussinessRuleValidationException($"La receta {recetaId.Value} ya está asignada a este tiempo de comida");
+                throw new BussinessRuleValidationException($"La receta {recetaId} ya está asignada a este tiempo de comida");
 
             var asignacion = new AsignacionReceta(recetaId, racion);
             _recetasAsignadas.Add(asignacion);
         }
 
-        internal void RemoverReceta(RecetaId recetaId)
+        internal void RemoverReceta(Guid recetaId)
         {
             var asignacion = _recetasAsignadas.FirstOrDefault(r => r.RecetaId == recetaId);
             if (asignacion == null)
-                throw new BussinessRuleValidationException($"La receta {recetaId.Value} no está asignada a este tiempo de comida");
+                throw new BussinessRuleValidationException($"La receta {recetaId} no está asignada a este tiempo de comida");
 
             _recetasAsignadas.Remove(asignacion);
         }

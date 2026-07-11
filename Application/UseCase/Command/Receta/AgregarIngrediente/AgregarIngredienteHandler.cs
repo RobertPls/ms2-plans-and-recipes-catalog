@@ -27,14 +27,14 @@ namespace Catalog.Application.UseCase.Command.Receta.AgregarIngrediente
         {
             try
             {
-                var receta = await _recetaRepository.FindByIdAsync(RecetaId.From(request.RecetaId));
+                var receta = await _recetaRepository.FindByIdAsync(request.RecetaId);
                 if (receta == null)
                     return Result.Fail("Receta no encontrada");
 
                 foreach (var item in request.Ingredientes)
                 {
                     receta.AgregarIngrediente(
-                        AlimentoId.From(item.AlimentoId),
+                        item.AlimentoId,
                         new Porcion(item.Cantidad)
                     );
                 }

@@ -50,7 +50,7 @@ namespace Catalog.Application.UseCase.Command.Alimento.CrearAlimento
                 await _repository.CreateAsync(alimento);
                 await _unitOfWork.Commit();
 
-                return Result<Guid>.Ok(alimento.Id.Value, "Alimento creado exitosamente");
+                return Result<Guid>.Ok(alimento.Id, "Alimento creado exitosamente");
             }
             catch (Exception ex)
             {

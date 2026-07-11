@@ -3,7 +3,6 @@ using Catalog.Application.UseCase.Query.Receta;
 using Catalog.Application.Utils;
 using Catalog.Domain.Repository.Alimento;
 using Catalog.Domain.Repository.Receta;
-using Catalog.Domain.ValueObjects;
 using Shared.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -30,13 +29,13 @@ namespace Catalog.Infrastructure.Query.Receta
         {
             try
             {
-                var receta = await _repository.FindByIdAsync(RecetaId.From(request.Id));
+                var receta = await _repository.FindByIdAsync(request.Id);
                 if (receta == null)
                     return Result.Fail<RecetaDto>("Receta no encontrada");
 
                 var dto = new RecetaDto
                 {
-                    Id = receta.Id.Value,
+                    Id = receta.Id,
                     Nombre = receta.Nombre,
                     Instrucciones = receta.Instrucciones
                 };
@@ -46,7 +45,7 @@ namespace Catalog.Infrastructure.Query.Receta
                     var alimento = await _alimentoRepository.FindByIdAsync(ing.AlimentoId);
                     dto.Ingredientes.Add(new IngredienteDto
                     {
-                        AlimentoId = ing.AlimentoId.Value,
+                        AlimentoId = ing.AlimentoId,
                         NombreAlimento = alimento?.Nombre ?? "Unknown",
                         Cantidad = ing.Porcion.Cantidad
                     });
