@@ -31,6 +31,12 @@ namespace Catalog.Application.UseCase.Command.Alimento.CrearAlimento
         {
             try
             {
+                if (!Enum.IsDefined(typeof(UnidadMedida), request.UnidadMedida))
+                {
+                    var validos = string.Join(", ", Enum.GetValues<UnidadMedida>().Select(v => $"{(int)v}={v}"));
+                    return Result.Fail<Guid>($"Unidad de medida inválida: {request.UnidadMedida}. Valores válidos: {validos}");
+                }
+
                 var nombre = request.Nombre.ToUpperInvariant();
                 var categoria = request.Categoria.ToUpperInvariant();
                 var unidadMedida = (UnidadMedida)request.UnidadMedida;

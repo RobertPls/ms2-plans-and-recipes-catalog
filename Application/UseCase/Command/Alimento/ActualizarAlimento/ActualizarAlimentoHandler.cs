@@ -31,6 +31,12 @@ namespace Catalog.Application.UseCase.Command.Alimento.ActualizarAlimento
                 if (alimento == null)
                     return Result.Fail("Alimento no encontrado");
 
+                if (!Enum.IsDefined(typeof(UnidadMedida), request.UnidadMedida))
+                {
+                    var validos = string.Join(", ", Enum.GetValues<UnidadMedida>().Select(v => $"{(int)v}={v}"));
+                    return Result.Fail($"Unidad de medida inválida: {request.UnidadMedida}. Valores válidos: {validos}");
+                }
+
                 var nombre = request.Nombre.ToUpperInvariant();
                 var categoria = request.Categoria.ToUpperInvariant();
                 var unidadMedida = (UnidadMedida)request.UnidadMedida;

@@ -33,7 +33,7 @@ namespace Catalog.Infrastructure.Query.Alimento
                     Id = alimento.Id.Value,
                     Nombre = alimento.Nombre,
                     Categoria = alimento.Categoria,
-                    UnidadMedida = (int)alimento.UnidadMedida,
+                    UnidadMedida = alimento.UnidadMedida.ToString(),
                     Cantidad = alimento.InfoNutricionalBase.Cantidad,
                     Calorias = alimento.InfoNutricionalBase.Calorias,
                     Proteinas = alimento.InfoNutricionalBase.Proteinas,

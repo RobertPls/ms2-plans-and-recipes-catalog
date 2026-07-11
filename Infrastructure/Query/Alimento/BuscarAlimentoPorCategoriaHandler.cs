@@ -1,6 +1,7 @@
 using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Query.Alimento;
+using Catalog.Domain.ValueObjects;
 using Catalog.Infrastructure.EntityFramework.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace Catalog.Infrastructure.Query.Alimento
                     Id = a.Id,
                     Nombre = a.Nombre,
                     Categoria = a.Categoria,
+                    UnidadMedida = ((UnidadMedida)a.UnidadMedida).ToString(),
                     Cantidad = a.Cantidad,
                     Calorias = a.Calorias,
                     Proteinas = a.Proteinas,

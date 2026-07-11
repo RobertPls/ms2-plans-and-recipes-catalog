@@ -32,7 +32,10 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComid
                     return Result.Fail("Plan alimentario no encontrado");
 
                 if (!Enum.IsDefined(typeof(TipoTiempoComida), request.Tipo))
-                    return Result.Fail($"Tipo de tiempo de comida inválido: {request.Tipo}. Valores válidos: 1=Desayuno, 2=Media Manana, 3=Almuerzo, 4=Merienda, 5=Cena");
+                {
+                    var validos = string.Join(", ", Enum.GetValues<TipoTiempoComida>().Select(v => $"{(int)v}={v.ToDisplayName()}"));
+                    return Result.Fail($"Tipo de tiempo de comida inválido: {request.Tipo}. Valores válidos: {validos}");
+                }
 
                 var tipo = (TipoTiempoComida)request.Tipo;
                 _logger.LogInformation("Adding meal: PlanId={PlanId}, Dia={Dia}, Tipo={Tipo}, Nombre={Nombre}, Orden={Orden}",

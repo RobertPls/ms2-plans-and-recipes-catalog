@@ -5,7 +5,7 @@ namespace Catalog.Application.Dto
         public Guid Id { get; set; }
         public string Nombre { get; set; } = null!;
         public string Categoria { get; set; } = null!;
-        public int UnidadMedida { get; set; }
+        public string UnidadMedida { get; set; } = null!;
         public decimal Cantidad { get; set; }
         public decimal Calorias { get; set; }
         public decimal Proteinas { get; set; }
