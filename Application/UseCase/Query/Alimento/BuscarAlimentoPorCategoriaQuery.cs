@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Catalog.Application.UseCase.Query.Alimento
 {
-    public class BuscarAlimentoPorCategoriaQuery : IRequest<PagedList<AlimentoDto>>
+    public class BuscarAlimentoPorCategoriaQuery : IRequest<Result<PagedList<AlimentoDto>>>
     {
         public string Categoria { get; set; } = null!;
         public int Page { get; set; } = 1;

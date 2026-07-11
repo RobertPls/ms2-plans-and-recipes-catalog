@@ -1,5 +1,6 @@
 using Catalog.Application.Dto;
 using Catalog.Application.UseCase.Query.Alimento;
+using Catalog.Application.Utils;
 using Catalog.Domain.Repository.Alimento;
 using Catalog.Domain.ValueObjects;
 using Shared.Core;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.Alimento
 {
-    public class GetAlimentoByIdHandler : IRequestHandler<GetAlimentoByIdQuery, AlimentoDto?>
+    public class GetAlimentoByIdHandler : IRequestHandler<GetAlimentoByIdQuery, Result<AlimentoDto>>
     {
         private readonly IAlimentoRepository _repository;
         private readonly ILogger<GetAlimentoByIdHandler> _logger;
@@ -19,14 +20,15 @@ namespace Catalog.Infrastructure.Query.Alimento
             _logger = logger;
         }
 
-        public async Task<AlimentoDto?> Handle(GetAlimentoByIdQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<AlimentoDto>> Handle(GetAlimentoByIdQuery request, CancellationToken cancellationToken = default)
         {
             try
             {
                 var alimento = await _repository.FindByIdAsync(AlimentoId.From(request.Id));
-                if (alimento == null) return null;
+                if (alimento == null)
+                    return Result.Fail<AlimentoDto>("Alimento no encontrado");
 
-                return new AlimentoDto
+                return Result.Ok<AlimentoDto>(new AlimentoDto
                 {
                     Id = alimento.Id.Value,
                     Nombre = alimento.Nombre,
@@ -36,12 +38,12 @@ namespace Catalog.Infrastructure.Query.Alimento
                     Proteinas = alimento.InfoNutricionalBase.Proteinas,
                     Carbohidratos = alimento.InfoNutricionalBase.Carbohidratos,
                     Grasas = alimento.InfoNutricionalBase.Grasas
-                };
+                }, "Alimento obtenido exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener alimento con id: {AlimentoId}", request.Id);
-                return null;
+                return Result.Fail<AlimentoDto>(ex.Message);
             }
         }
     }

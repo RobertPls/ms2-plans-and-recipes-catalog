@@ -1,9 +1,10 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 
 namespace Catalog.Application.UseCase.Query.PlanAlimentario
 {
-    public class GetComposicionPlanQuery : IRequest<ComposicionPlanDto?>
+    public class GetComposicionPlanQuery : IRequest<Result<ComposicionPlanDto>>
     {
         public Guid PlanId { get; set; }
         public GetComposicionPlanQuery() { }

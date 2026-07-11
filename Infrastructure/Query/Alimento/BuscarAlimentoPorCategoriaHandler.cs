@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.Alimento
 {
-    public class BuscarAlimentoPorCategoriaHandler : IRequestHandler<BuscarAlimentoPorCategoriaQuery, PagedList<AlimentoDto>>
+    public class BuscarAlimentoPorCategoriaHandler : IRequestHandler<BuscarAlimentoPorCategoriaQuery, Result<PagedList<AlimentoDto>>>
     {
         private readonly ReadDbContext _dbContext;
         private readonly ILogger<BuscarAlimentoPorCategoriaHandler> _logger;
@@ -19,7 +19,7 @@ namespace Catalog.Infrastructure.Query.Alimento
             _logger = logger;
         }
 
-        public async Task<PagedList<AlimentoDto>> Handle(BuscarAlimentoPorCategoriaQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedList<AlimentoDto>>> Handle(BuscarAlimentoPorCategoriaQuery request, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -38,12 +38,14 @@ namespace Catalog.Infrastructure.Query.Alimento
                     Grasas = a.Grasas
                 }).AsQueryable();
 
-                return PagedList<AlimentoDto>.Create(dtoItems, request.Page, request.PageSize);
+                return Result.Ok<PagedList<AlimentoDto>>(
+                    PagedList<AlimentoDto>.Create(dtoItems, request.Page, request.PageSize),
+                    "Búsqueda por categoría exitosa");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al buscar alimentos por categoria");
-                return PagedList<AlimentoDto>.Create(new List<AlimentoDto>().AsQueryable(), 1, 10);
+                return Result.Fail<PagedList<AlimentoDto>>(ex.Message);
             }
         }
     }

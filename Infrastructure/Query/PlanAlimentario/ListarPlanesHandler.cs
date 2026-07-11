@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.PlanAlimentario
 {
-    public class ListarPlanesHandler : IRequestHandler<ListarPlanesQuery, PagedList<PlanAlimentarioDto>>
+    public class ListarPlanesHandler : IRequestHandler<ListarPlanesQuery, Result<IEnumerable<PlanAlimentarioDto>>>
     {
         private readonly ReadDbContext _dbContext;
         private readonly ILogger<ListarPlanesHandler> _logger;
@@ -19,7 +19,7 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
             _logger = logger;
         }
 
-        public async Task<PagedList<PlanAlimentarioDto>> Handle(ListarPlanesQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<PlanAlimentarioDto>>> Handle(ListarPlanesQuery request, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -30,14 +30,14 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                     Nombre = p.Nombre,
                     DuracionTipo = p.DuracionTipo,
                     DiasTotal = p.DuracionTipo == "QUINCENAL" ? 15 : 30
-                }).AsQueryable();
+                }).ToList();
 
-                return PagedList<PlanAlimentarioDto>.Create(dtoItems, request.Page, request.PageSize);
+                return Result.Ok<IEnumerable<PlanAlimentarioDto>>(dtoItems, "Listado de planes obtenido exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al listar planes");
-                return PagedList<PlanAlimentarioDto>.Create(new List<PlanAlimentarioDto>().AsQueryable(), 1, 10);
+                return Result.Fail<IEnumerable<PlanAlimentarioDto>>(ex.Message);
             }
         }
     }

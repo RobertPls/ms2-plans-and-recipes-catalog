@@ -1,3 +1,4 @@
+using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Command.Receta.CrearReceta;
 using Catalog.Application.UseCase.Command.Receta.AgregarIngrediente;
@@ -43,8 +44,9 @@ namespace Catalog.WebApi.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _mediator.Send(new GetRecetaByIdQuery(id));
-            if (result == null) return NotFound(ApiResponse.Fail("Receta no encontrada"));
-            return Ok(ApiResponse.Ok(result, "Receta obtenida exitosamente"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse<RecetaDto>.Ok(result.Value, result.Message));
+            return NotFound(ApiResponse.Fail(result.Message, result.Errors));
         }
 
         [HttpGet]
@@ -52,15 +54,18 @@ namespace Catalog.WebApi.Controllers
         {
             var query = new ListarRecetasQuery { Page = page, PageSize = pageSize };
             var result = await _mediator.Send(query);
-            return Ok(ApiResponse.Ok(result, "Listado de recetas obtenido exitosamente"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse<PagedList<RecetaDto>>.Ok(result.Value, result.Message));
+            return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
 
         [HttpGet("{recetaId:guid}/info-nutricional")]
         public async Task<IActionResult> GetInfoNutricional(Guid recetaId)
         {
             var result = await _mediator.Send(new GetInfoNutricionalRecetaQuery(recetaId));
-            if (result == null) return NotFound(ApiResponse.Fail("Información nutricional no encontrada"));
-            return Ok(ApiResponse.Ok(result, "Información nutricional obtenida exitosamente"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse<InfoNutricionalDto>.Ok(result.Value, result.Message));
+            return NotFound(ApiResponse.Fail(result.Message, result.Errors));
         }
     }
 }

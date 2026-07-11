@@ -1,5 +1,6 @@
 using Catalog.Application.Dto;
 using Catalog.Application.UseCase.Query.PlanAlimentario;
+using Catalog.Application.Utils;
 using Catalog.Domain.Repository.PlanAlimentario;
 using Catalog.Domain.Repository.Receta;
 using Catalog.Domain.ValueObjects;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.PlanAlimentario
 {
-    public class GetPlanByIdHandler : IRequestHandler<GetPlanByIdQuery, PlanAlimentarioDto?>
+    public class GetPlanByIdHandler : IRequestHandler<GetPlanByIdQuery, Result<PlanAlimentarioDto>>
     {
         private readonly IPlanAlimentarioRepository _repository;
         private readonly IRecetaRepository _recetaRepository;
@@ -22,12 +23,13 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
             _logger = logger;
         }
 
-        public async Task<PlanAlimentarioDto?> Handle(GetPlanByIdQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<PlanAlimentarioDto>> Handle(GetPlanByIdQuery request, CancellationToken cancellationToken = default)
         {
             try
             {
                 var plan = await _repository.FindByIdAsync(PlanId.From(request.Id));
-                if (plan == null) return null;
+                if (plan == null)
+                    return Result.Fail<PlanAlimentarioDto>("Plan alimentario no encontrado");
 
                 var dto = new PlanAlimentarioDto
                 {
@@ -62,12 +64,12 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                     dto.Dias.Add(diaDto);
                 }
 
-                return dto;
+                return Result.Ok<PlanAlimentarioDto>(dto, "Plan alimentario obtenido exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener plan con id: {PlanId}", request.Id);
-                return null;
+                return Result.Fail<PlanAlimentarioDto>(ex.Message);
             }
         }
     }

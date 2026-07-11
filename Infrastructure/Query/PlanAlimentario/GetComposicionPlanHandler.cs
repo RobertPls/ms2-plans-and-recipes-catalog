@@ -1,4 +1,5 @@
 using Catalog.Application.UseCase.Query.PlanAlimentario;
+using Catalog.Application.Utils;
 using Catalog.Domain.Repository.Alimento;
 using Catalog.Domain.Repository.PlanAlimentario;
 using Catalog.Domain.Repository.Receta;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.PlanAlimentario
 {
-    public class GetComposicionPlanHandler : IRequestHandler<GetComposicionPlanQuery, ComposicionPlanDto?>
+    public class GetComposicionPlanHandler : IRequestHandler<GetComposicionPlanQuery, Result<ComposicionPlanDto>>
     {
         private readonly IPlanAlimentarioRepository _planRepository;
         private readonly IRecetaRepository _recetaRepository;
@@ -28,12 +29,13 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
             _logger = logger;
         }
 
-        public async Task<ComposicionPlanDto?> Handle(GetComposicionPlanQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<ComposicionPlanDto>> Handle(GetComposicionPlanQuery request, CancellationToken cancellationToken = default)
         {
             try
             {
                 var plan = await _planRepository.FindByIdAsync(PlanId.From(request.PlanId));
-                if (plan == null) return null;
+                if (plan == null)
+                    return Result.Fail<ComposicionPlanDto>("Plan alimentario no encontrado");
 
                 var dto = new ComposicionPlanDto
                 {
@@ -90,12 +92,12 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                     dto.Dias.Add(diaDto);
                 }
 
-                return dto;
+                return Result.Ok<ComposicionPlanDto>(dto, "Composición del plan obtenida exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener composicion del plan {PlanId}", request.PlanId);
-                return null;
+                return Result.Fail<ComposicionPlanDto>(ex.Message);
             }
         }
     }

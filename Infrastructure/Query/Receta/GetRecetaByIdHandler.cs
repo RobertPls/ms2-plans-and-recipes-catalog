@@ -1,5 +1,6 @@
 using Catalog.Application.Dto;
 using Catalog.Application.UseCase.Query.Receta;
+using Catalog.Application.Utils;
 using Catalog.Domain.Repository.Receta;
 using Catalog.Domain.ValueObjects;
 using Shared.Core;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.Receta
 {
-    public class GetRecetaByIdHandler : IRequestHandler<GetRecetaByIdQuery, RecetaDto?>
+    public class GetRecetaByIdHandler : IRequestHandler<GetRecetaByIdQuery, Result<RecetaDto>>
     {
         private readonly IRecetaRepository _repository;
         private readonly ILogger<GetRecetaByIdHandler> _logger;
@@ -19,12 +20,13 @@ namespace Catalog.Infrastructure.Query.Receta
             _logger = logger;
         }
 
-        public async Task<RecetaDto?> Handle(GetRecetaByIdQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<RecetaDto>> Handle(GetRecetaByIdQuery request, CancellationToken cancellationToken = default)
         {
             try
             {
                 var receta = await _repository.FindByIdAsync(RecetaId.From(request.Id));
-                if (receta == null) return null;
+                if (receta == null)
+                    return Result.Fail<RecetaDto>("Receta no encontrada");
 
                 var dto = new RecetaDto
                 {
@@ -43,12 +45,12 @@ namespace Catalog.Infrastructure.Query.Receta
                     });
                 }
 
-                return dto;
+                return Result.Ok<RecetaDto>(dto, "Receta obtenida exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener receta con id: {RecetaId}", request.Id);
-                return null;
+                return Result.Fail<RecetaDto>(ex.Message);
             }
         }
     }

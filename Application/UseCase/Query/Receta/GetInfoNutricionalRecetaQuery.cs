@@ -1,10 +1,11 @@
 using Catalog.Application.Dto;
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 
 namespace Catalog.Application.UseCase.Query.Receta
 {
-    public class GetInfoNutricionalRecetaQuery : IRequest<InfoNutricionalDto?>
+    public class GetInfoNutricionalRecetaQuery : IRequest<Result<InfoNutricionalDto>>
     {
         public Guid RecetaId { get; set; }
         public GetInfoNutricionalRecetaQuery() { }

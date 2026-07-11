@@ -1,3 +1,4 @@
+using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan;
 using Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComida;
@@ -54,19 +55,21 @@ namespace Catalog.WebApi.Controllers
         }
 
         [HttpGet("{planId:guid}")]
-        public async Task<IActionResult> GetById(Guid planId)
+        public async Task<IActionResult> GetComposicion(Guid planId)
         {
             var result = await _mediator.Send(new GetComposicionPlanQuery(planId));
-            if (result == null) return NotFound(ApiResponse.Fail("Composición del plan no encontrada"));
-            return Ok(ApiResponse.Ok(result, "Composición del plan obtenida exitosamente"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse<ComposicionPlanDto>.Ok(result.Value, result.Message));
+            return NotFound(ApiResponse.Fail(result.Message, result.Errors));
         }
 
         [HttpGet]
-        public async Task<IActionResult> List([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> List()
         {
-            var query = new ListarPlanesQuery { Page = page, PageSize = pageSize };
-            var result = await _mediator.Send(query);
-            return Ok(ApiResponse.Ok(result, "Listado de planes obtenido exitosamente"));
+            var result = await _mediator.Send(new ListarPlanesQuery());
+            if (result.IsSuccess)
+                return Ok(ApiResponse<IEnumerable<PlanAlimentarioDto>>.Ok(result.Value, result.Message));
+            return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
     }
 }

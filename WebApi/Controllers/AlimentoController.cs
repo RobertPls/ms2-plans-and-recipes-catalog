@@ -1,3 +1,4 @@
+using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Command.Alimento.CrearAlimento;
 using Catalog.Application.UseCase.Command.Alimento.ActualizarInfoNutricional;
@@ -33,8 +34,9 @@ namespace Catalog.WebApi.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _mediator.Send(new GetAlimentoByIdQuery(id));
-            if (result == null) return NotFound(ApiResponse.Fail("Alimento no encontrado"));
-            return Ok(ApiResponse.Ok(result, "Alimento obtenido exitosamente"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse<AlimentoDto>.Ok(result.Value, result.Message));
+            return NotFound(ApiResponse.Fail(result.Message, result.Errors));
         }
 
         [HttpGet]
@@ -42,7 +44,9 @@ namespace Catalog.WebApi.Controllers
         {
             var query = new ListarAlimentosQuery { Page = page, PageSize = pageSize };
             var result = await _mediator.Send(query);
-            return Ok(ApiResponse.Ok(result, "Listado de alimentos obtenido exitosamente"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse<PagedList<AlimentoDto>>.Ok(result.Value, result.Message));
+            return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
 
         [HttpGet("categoria/{categoria}")]
@@ -50,7 +54,9 @@ namespace Catalog.WebApi.Controllers
         {
             var query = new BuscarAlimentoPorCategoriaQuery(categoria) { Page = page, PageSize = pageSize };
             var result = await _mediator.Send(query);
-            return Ok(ApiResponse.Ok(result, "Búsqueda por categoría exitosa"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse<PagedList<AlimentoDto>>.Ok(result.Value, result.Message));
+            return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
 
         [HttpPut("{alimentoId:guid}/info-nutricional")]

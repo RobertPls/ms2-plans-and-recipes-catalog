@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.Alimento
 {
-    public class ListarAlimentosHandler : IRequestHandler<ListarAlimentosQuery, PagedList<AlimentoDto>>
+    public class ListarAlimentosHandler : IRequestHandler<ListarAlimentosQuery, Result<PagedList<AlimentoDto>>>
     {
         private readonly ReadDbContext _dbContext;
         private readonly ILogger<ListarAlimentosHandler> _logger;
@@ -19,7 +19,7 @@ namespace Catalog.Infrastructure.Query.Alimento
             _logger = logger;
         }
 
-        public async Task<PagedList<AlimentoDto>> Handle(ListarAlimentosQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedList<AlimentoDto>>> Handle(ListarAlimentosQuery request, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -36,12 +36,14 @@ namespace Catalog.Infrastructure.Query.Alimento
                     Grasas = a.Grasas
                 }).AsQueryable();
 
-                return PagedList<AlimentoDto>.Create(dtoItems, request.Page, request.PageSize);
+                return Result.Ok<PagedList<AlimentoDto>>(
+                    PagedList<AlimentoDto>.Create(dtoItems, request.Page, request.PageSize),
+                    "Listado de alimentos obtenido exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al listar alimentos");
-                return PagedList<AlimentoDto>.Create(new List<AlimentoDto>().AsQueryable(), 1, 10);
+                return Result.Fail<PagedList<AlimentoDto>>(ex.Message);
             }
         }
     }

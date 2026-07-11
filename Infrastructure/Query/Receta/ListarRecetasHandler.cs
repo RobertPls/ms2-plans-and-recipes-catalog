@@ -2,14 +2,13 @@ using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Query.Receta;
 using Catalog.Infrastructure.EntityFramework.Context;
-using Catalog.Infrastructure.EntityFramework.ReadModel.Receta;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Catalog.Infrastructure.Query.Receta
 {
-    public class ListarRecetasHandler : IRequestHandler<ListarRecetasQuery, PagedList<RecetaDto>>
+    public class ListarRecetasHandler : IRequestHandler<ListarRecetasQuery, Result<PagedList<RecetaDto>>>
     {
         private readonly ReadDbContext _dbContext;
         private readonly ILogger<ListarRecetasHandler> _logger;
@@ -20,7 +19,7 @@ namespace Catalog.Infrastructure.Query.Receta
             _logger = logger;
         }
 
-        public async Task<PagedList<RecetaDto>> Handle(ListarRecetasQuery request, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedList<RecetaDto>>> Handle(ListarRecetasQuery request, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -45,12 +44,14 @@ namespace Catalog.Infrastructure.Query.Receta
                     return dto;
                 }).AsQueryable();
 
-                return PagedList<RecetaDto>.Create(dtoItems, request.Page, request.PageSize);
+                return Result.Ok<PagedList<RecetaDto>>(
+                    PagedList<RecetaDto>.Create(dtoItems, request.Page, request.PageSize),
+                    "Listado de recetas obtenido exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al listar recetas");
-                return PagedList<RecetaDto>.Create(new List<RecetaDto>().AsQueryable(), 1, 10);
+                return Result.Fail<PagedList<RecetaDto>>(ex.Message);
             }
         }
     }

@@ -5,9 +5,7 @@ using MediatR;
 
 namespace Catalog.Application.UseCase.Query.PlanAlimentario
 {
-    public class ListarPlanesQuery : IRequest<PagedList<PlanAlimentarioDto>>
+    public class ListarPlanesQuery : IRequest<Result<IEnumerable<PlanAlimentarioDto>>>
     {
-        public int Page { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
     }
 }
