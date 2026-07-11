@@ -1,6 +1,7 @@
 using Catalog.Application.Dto;
 using Catalog.Application.UseCase.Query.Receta;
 using Catalog.Application.Utils;
+using Catalog.Domain.Repository.Alimento;
 using Catalog.Domain.Repository.Receta;
 using Catalog.Domain.ValueObjects;
 using Shared.Core;
@@ -12,11 +13,16 @@ namespace Catalog.Infrastructure.Query.Receta
     public class GetRecetaByIdHandler : IRequestHandler<GetRecetaByIdQuery, Result<RecetaDto>>
     {
         private readonly IRecetaRepository _repository;
+        private readonly IAlimentoRepository _alimentoRepository;
         private readonly ILogger<GetRecetaByIdHandler> _logger;
 
-        public GetRecetaByIdHandler(IRecetaRepository repository, ILogger<GetRecetaByIdHandler> logger)
+        public GetRecetaByIdHandler(
+            IRecetaRepository repository,
+            IAlimentoRepository alimentoRepository,
+            ILogger<GetRecetaByIdHandler> logger)
         {
             _repository = repository;
+            _alimentoRepository = alimentoRepository;
             _logger = logger;
         }
 
@@ -37,11 +43,12 @@ namespace Catalog.Infrastructure.Query.Receta
 
                 foreach (var ing in receta.Ingredientes)
                 {
+                    var alimento = await _alimentoRepository.FindByIdAsync(ing.AlimentoId);
                     dto.Ingredientes.Add(new IngredienteDto
                     {
                         AlimentoId = ing.AlimentoId.Value,
-                        Cantidad = ing.Porcion.Cantidad,
-                        Unidad = ing.Porcion.Unidad
+                        NombreAlimento = alimento?.Nombre ?? "Unknown",
+                        Cantidad = ing.Porcion.Cantidad
                     });
                 }
 

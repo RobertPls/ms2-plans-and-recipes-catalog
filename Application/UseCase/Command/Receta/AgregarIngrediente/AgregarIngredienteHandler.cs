@@ -35,7 +35,7 @@ namespace Catalog.Application.UseCase.Command.Receta.AgregarIngrediente
                 {
                     receta.AgregarIngrediente(
                         AlimentoId.From(item.AlimentoId),
-                        new Porcion(item.Cantidad, item.Unidad)
+                        new Porcion(item.Cantidad)
                     );
                 }
 

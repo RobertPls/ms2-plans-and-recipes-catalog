@@ -43,9 +43,13 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Alimentos
                 .HasColumnName("categoria")
                 .HasMaxLength(100);
 
+            builder.Property(x => x.UnidadMedida)
+                .HasColumnName("unidadMedida")
+                .HasConversion<int>();
+
             builder.OwnsOne(x => x.InfoNutricionalBase, info =>
             {
-                info.Property(i => i.Gramos).HasColumnName("gramos").HasPrecision(12, 4);
+                info.Property(i => i.Cantidad).HasColumnName("cantidad").HasPrecision(12, 4);
                 info.Property(i => i.Calorias).HasColumnName("calorias").HasPrecision(12, 4);
                 info.Property(i => i.Proteinas).HasColumnName("proteinas").HasPrecision(12, 4);
                 info.Property(i => i.Carbohidratos).HasColumnName("carbohidratos").HasPrecision(12, 4);

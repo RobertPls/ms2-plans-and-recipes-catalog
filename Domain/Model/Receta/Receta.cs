@@ -33,7 +33,7 @@ namespace Catalog.Domain.Model.Recetas
             var ingrediente = new IngredienteReceta(alimentoId, porcion);
             _ingredientes.Add(ingrediente);
 
-            AddDomainEvent(new IngredienteAgregadoAReceta(Id, alimentoId, porcion.Cantidad, porcion.Unidad));
+            AddDomainEvent(new IngredienteAgregadoAReceta(Id, alimentoId, porcion.Cantidad));
         }
 
         public InfoNutricional CalcularInfoNutricionalTotal(Func<AlimentoId, Alimento> obtenerAlimento)
@@ -45,7 +45,7 @@ namespace Catalog.Domain.Model.Recetas
                 var alimento = obtenerAlimento(ing.AlimentoId);
                 if (alimento == null) continue;
 
-                var factor = ing.Porcion.Cantidad / alimento.InfoNutricionalBase.Gramos;
+                var factor = ing.Porcion.Cantidad / alimento.InfoNutricionalBase.Cantidad;
                 totalCalorias += alimento.InfoNutricionalBase.Calorias * factor;
                 totalProteinas += alimento.InfoNutricionalBase.Proteinas * factor;
                 totalCarbos += alimento.InfoNutricionalBase.Carbohidratos * factor;

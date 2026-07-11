@@ -31,7 +31,7 @@ namespace Catalog.Infrastructure.Query.Alimento
                     Id = a.Id,
                     Nombre = a.Nombre,
                     Categoria = a.Categoria,
-                    Gramos = a.Gramos,
+                    Cantidad = a.Cantidad,
                     Calorias = a.Calorias,
                     Proteinas = a.Proteinas,
                     Carbohidratos = a.Carbohidratos,

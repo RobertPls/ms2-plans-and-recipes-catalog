@@ -55,6 +55,5 @@ namespace Catalog.Application.UseCase.Query.PlanAlimentario
     public class PorcionDto
     {
         public decimal Cantidad { get; set; }
-        public string Unidad { get; set; } = null!;
     }
 }

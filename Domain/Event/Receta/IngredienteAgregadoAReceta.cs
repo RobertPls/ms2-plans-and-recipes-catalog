@@ -8,15 +8,13 @@ namespace Catalog.Domain.Event.Receta
         public RecetaId RecetaId { get; }
         public AlimentoId AlimentoId { get; }
         public decimal PorcionCantidad { get; }
-        public string PorcionUnidad { get; }
 
-        public IngredienteAgregadoAReceta(RecetaId recetaId, AlimentoId alimentoId, decimal porcionCantidad, string porcionUnidad)
+        public IngredienteAgregadoAReceta(RecetaId recetaId, AlimentoId alimentoId, decimal porcionCantidad)
             : base(DateTime.UtcNow)
         {
             RecetaId = recetaId;
             AlimentoId = alimentoId;
             PorcionCantidad = porcionCantidad;
-            PorcionUnidad = porcionUnidad;
         }
     }
 }

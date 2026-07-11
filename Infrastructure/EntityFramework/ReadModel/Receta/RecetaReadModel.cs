@@ -17,7 +17,6 @@ namespace Catalog.Infrastructure.EntityFramework.ReadModel.Receta
         public Guid Id { get; set; }
         public Guid AlimentoId { get; set; }
         public decimal PorcionCantidad { get; set; }
-        public string PorcionUnidad { get; set; } = null!;
         public Guid RecetaId { get; set; }
         public RecetaReadModel Receta { get; set; } = null!;
     }

@@ -13,6 +13,5 @@ namespace Catalog.Application.Dto
         public Guid AlimentoId { get; set; }
         public string NombreAlimento { get; set; } = null!;
         public decimal Cantidad { get; set; }
-        public string Unidad { get; set; } = null!;
     }
 }

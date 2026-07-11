@@ -13,7 +13,8 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.Alimento
 
             builder.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(500);
             builder.Property(x => x.Categoria).HasColumnName("categoria").HasMaxLength(100);
-            builder.Property(x => x.Gramos).HasColumnName("gramos").HasPrecision(12, 4);
+            builder.Property(x => x.UnidadMedida).HasColumnName("unidadMedida");
+            builder.Property(x => x.Cantidad).HasColumnName("cantidad").HasPrecision(12, 4);
             builder.Property(x => x.Calorias).HasColumnName("calorias").HasPrecision(12, 4);
             builder.Property(x => x.Proteinas).HasColumnName("proteinas").HasPrecision(12, 4);
             builder.Property(x => x.Carbohidratos).HasColumnName("carbohidratos").HasPrecision(12, 4);

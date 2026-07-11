@@ -17,6 +17,5 @@ namespace Catalog.Application.UseCase.Command.Receta.AgregarIngrediente
     {
         public Guid AlimentoId { get; set; }
         public decimal Cantidad { get; set; }
-        public string Unidad { get; set; } = null!;
     }
 }

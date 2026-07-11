@@ -62,7 +62,6 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.Recetas
                 ing.OwnsOne(x => x.Porcion, porcion =>
                 {
                     porcion.Property(p => p.Cantidad).HasColumnName("porcionCantidad").HasPrecision(12, 4);
-                    porcion.Property(p => p.Unidad).HasColumnName("porcionUnidad").HasMaxLength(50);
                 });
             });
         }

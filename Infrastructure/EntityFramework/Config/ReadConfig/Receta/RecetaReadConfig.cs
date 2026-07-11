@@ -29,7 +29,6 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.Receta
 
             builder.Property(x => x.AlimentoId).HasColumnName("alimentoId");
             builder.Property(x => x.PorcionCantidad).HasColumnName("porcionCantidad").HasPrecision(12, 4);
-            builder.Property(x => x.PorcionUnidad).HasColumnName("porcionUnidad").HasMaxLength(50);
         }
     }
 }

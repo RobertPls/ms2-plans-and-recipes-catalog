@@ -43,7 +43,7 @@ namespace Catalog.Infrastructure.Query.Receta
 
                 return Result.Ok<InfoNutricionalDto>(new InfoNutricionalDto
                 {
-                    Gramos = info.Gramos,
+                    Cantidad = info.Cantidad,
                     Calorias = info.Calorias,
                     Proteinas = info.Proteinas,
                     Carbohidratos = info.Carbohidratos,

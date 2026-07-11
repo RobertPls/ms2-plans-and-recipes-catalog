@@ -37,8 +37,7 @@ namespace Catalog.Infrastructure.Query.Receta
                         dto.Ingredientes.Add(new IngredienteDto
                         {
                             AlimentoId = ing.AlimentoId,
-                            Cantidad = ing.PorcionCantidad,
-                            Unidad = ing.PorcionUnidad
+                            Cantidad = ing.PorcionCantidad
                         });
                     }
                     return dto;

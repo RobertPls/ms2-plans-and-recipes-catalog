@@ -33,12 +33,13 @@ namespace Catalog.Application.UseCase.Command.Alimento.ActualizarAlimento
 
                 var nombre = request.Nombre.ToUpperInvariant();
                 var categoria = request.Categoria.ToUpperInvariant();
+                var unidadMedida = (UnidadMedida)request.UnidadMedida;
                 var info = new InfoNutricional(
-                    request.Gramos, request.Calorias, request.Proteinas,
+                    request.Cantidad, request.Calorias, request.Proteinas,
                     request.Carbohidratos, request.Grasas
                 );
 
-                alimento.Actualizar(nombre, categoria, info);
+                alimento.Actualizar(nombre, categoria, unidadMedida, info);
 
                 await _unitOfWork.Commit();
                 return Result.Ok("Alimento actualizado exitosamente");

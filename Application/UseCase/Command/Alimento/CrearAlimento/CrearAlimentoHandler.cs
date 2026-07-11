@@ -33,12 +33,13 @@ namespace Catalog.Application.UseCase.Command.Alimento.CrearAlimento
             {
                 var nombre = request.Nombre.ToUpperInvariant();
                 var categoria = request.Categoria.ToUpperInvariant();
+                var unidadMedida = (UnidadMedida)request.UnidadMedida;
                 var info = new InfoNutricional(
-                    request.Gramos, request.Calorias, request.Proteinas,
+                    request.Cantidad, request.Calorias, request.Proteinas,
                     request.Carbohidratos, request.Grasas
                 );
 
-                var alimento = _factory.Create(nombre, categoria, info);
+                var alimento = _factory.Create(nombre, categoria, unidadMedida, info);
 
                 await _repository.CreateAsync(alimento);
                 await _unitOfWork.Commit();

@@ -14,7 +14,7 @@ namespace Catalog.Application.UseCase.Query.Receta
 
     public class InfoNutricionalDto
     {
-        public decimal Gramos { get; set; }
+        public decimal Cantidad { get; set; }
         public decimal Calorias { get; set; }
         public decimal Proteinas { get; set; }
         public decimal Carbohidratos { get; set; }

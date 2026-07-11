@@ -6,6 +6,6 @@ namespace Catalog.Domain.Factory.Alimento
 
     public interface IAlimentoFactory
     {
-        Alimento Create(string nombre, string categoria, InfoNutricional infoNutricional);
+        Alimento Create(string nombre, string categoria, UnidadMedida unidadMedida, InfoNutricional infoNutricional);
     }
 }

@@ -6,9 +6,9 @@ namespace Catalog.Domain.Factory.Alimento
 
     public class AlimentoFactory : IAlimentoFactory
     {
-        public Alimento Create(string nombre, string categoria, InfoNutricional infoNutricional)
+        public Alimento Create(string nombre, string categoria, UnidadMedida unidadMedida, InfoNutricional infoNutricional)
         {
-            return new Alimento(nombre, categoria, infoNutricional);
+            return new Alimento(nombre, categoria, unidadMedida, infoNutricional);
         }
     }
 }

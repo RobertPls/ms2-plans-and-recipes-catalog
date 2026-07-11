@@ -71,16 +71,15 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                             foreach (var ing in receta.Ingredientes)
                             {
                                 var alimento = await _alimentoRepository.FindByIdAsync(ing.AlimentoId);
-                                recetaDto.Ingredientes.Add(new ComposicionIngredienteDto
-                                {
-                                    AlimentoId = ing.AlimentoId.Value,
-                                    NombreAlimento = alimento?.Nombre ?? "Unknown",
-                                    Porcion = new PorcionDto
+                                    recetaDto.Ingredientes.Add(new ComposicionIngredienteDto
                                     {
-                                        Cantidad = ing.Porcion.Cantidad,
-                                        Unidad = ing.Porcion.Unidad
-                                    }
-                                });
+                                        AlimentoId = ing.AlimentoId.Value,
+                                        NombreAlimento = alimento?.Nombre ?? "Unknown",
+                                        Porcion = new PorcionDto
+                                        {
+                                            Cantidad = ing.Porcion.Cantidad
+                                        }
+                                    });
                             }
 
                             tiempoDto.Recetas.Add(recetaDto);
