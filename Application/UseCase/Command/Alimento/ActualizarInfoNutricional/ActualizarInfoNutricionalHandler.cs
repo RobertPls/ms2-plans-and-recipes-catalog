@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 using Catalog.Domain.Repository.Alimento;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.UseCase.Command.Alimento.ActualizarInfoNutricional
 {
-    public class ActualizarInfoNutricionalHandler : IRequestHandler<ActualizarInfoNutricionalCommand, bool>
+    public class ActualizarInfoNutricionalHandler : IRequestHandler<ActualizarInfoNutricionalCommand, Result>
     {
         private readonly IAlimentoRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -22,12 +23,13 @@ namespace Catalog.Application.UseCase.Command.Alimento.ActualizarInfoNutricional
             _logger = logger;
         }
 
-        public async Task<bool> Handle(ActualizarInfoNutricionalCommand request, CancellationToken cancellationToken = default)
+        public async Task<Result> Handle(ActualizarInfoNutricionalCommand request, CancellationToken cancellationToken = default)
         {
             try
             {
                 var alimento = await _repository.FindByIdAsync(AlimentoId.From(request.AlimentoId));
-                if (alimento == null) return false;
+                if (alimento == null)
+                    return Result.Fail("Alimento no encontrado");
 
                 var nuevaInfo = new InfoNutricional(
                     request.Gramos, request.Calorias, request.Proteinas,
@@ -37,12 +39,12 @@ namespace Catalog.Application.UseCase.Command.Alimento.ActualizarInfoNutricional
                 alimento.ActualizarInfoNutricional(nuevaInfo);
 
                 await _unitOfWork.Commit();
-                return true;
+                return Result.Ok("Información nutricional actualizada exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al actualizar info nutricional");
-                return false;
+                return Result.Fail(ex.Message);
             }
         }
     }

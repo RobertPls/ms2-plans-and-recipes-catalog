@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Command.Alimento.CrearAlimento;
 using Catalog.Application.UseCase.Command.Alimento.ActualizarInfoNutricional;
 using Catalog.Application.UseCase.Query.Alimento;
@@ -22,8 +23,10 @@ namespace Catalog.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CrearAlimentoCommand command)
         {
-            var id = await _mediator.Send(command);
-            return Ok(ApiResponse<Guid>.Ok(id, "Alimento creado exitosamente"));
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
+                return Ok(ApiResponse<Guid>.Ok(result.Value, result.Message));
+            return BadRequest(ApiResponse<Guid>.Fail(result.Message, result.Errors));
         }
 
         [HttpGet("{id:guid}")]
@@ -55,9 +58,9 @@ namespace Catalog.WebApi.Controllers
         {
             command.AlimentoId = alimentoId;
             var result = await _mediator.Send(command);
-            return result
-                ? Ok(ApiResponse.Ok("Información nutricional actualizada exitosamente"))
-                : NotFound(ApiResponse.Fail("Alimento no encontrado"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse.Ok(result.Message));
+            return NotFound(ApiResponse.Fail(result.Message, result.Errors));
         }
     }
 }

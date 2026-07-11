@@ -1,9 +1,10 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 
 namespace Catalog.Application.UseCase.Command.Alimento.CrearAlimento
 {
-    public class CrearAlimentoCommand : IRequest<Guid>
+    public class CrearAlimentoCommand : IRequest<Result<Guid>>
     {
         public string Nombre { get; set; } = null!;
         public string Categoria { get; set; } = null!;

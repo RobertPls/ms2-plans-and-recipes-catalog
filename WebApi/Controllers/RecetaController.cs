@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Command.Receta.CrearReceta;
 using Catalog.Application.UseCase.Command.Receta.AgregarIngrediente;
 using Catalog.Application.UseCase.Query.Receta;
@@ -22,8 +23,10 @@ namespace Catalog.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CrearRecetaCommand command)
         {
-            var id = await _mediator.Send(command);
-            return Ok(ApiResponse<Guid>.Ok(id, "Receta creada exitosamente"));
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
+                return Ok(ApiResponse<Guid>.Ok(result.Value, result.Message));
+            return BadRequest(ApiResponse<Guid>.Fail(result.Message, result.Errors));
         }
 
         [HttpPost("{recetaId:guid}/ingredientes")]
@@ -31,9 +34,9 @@ namespace Catalog.WebApi.Controllers
         {
             command.RecetaId = recetaId;
             var result = await _mediator.Send(command);
-            return result
-                ? Ok(ApiResponse.Ok("Ingrediente agregado exitosamente"))
-                : BadRequest(ApiResponse.Fail("No se pudo agregar el ingrediente"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse.Ok(result.Message));
+            return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
 
         [HttpGet("{id:guid}")]

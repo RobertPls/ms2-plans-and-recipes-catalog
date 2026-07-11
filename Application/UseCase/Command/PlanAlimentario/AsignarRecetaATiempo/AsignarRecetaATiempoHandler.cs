@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 using Catalog.Domain.Repository.PlanAlimentario;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiempo
 {
-    public class AsignarRecetaATiempoHandler : IRequestHandler<AsignarRecetaATiempoCommand, bool>
+    public class AsignarRecetaATiempoHandler : IRequestHandler<AsignarRecetaATiempoCommand, Result>
     {
         private readonly IPlanAlimentarioRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -22,12 +23,13 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiem
             _logger = logger;
         }
 
-        public async Task<bool> Handle(AsignarRecetaATiempoCommand request, CancellationToken cancellationToken = default)
+        public async Task<Result> Handle(AsignarRecetaATiempoCommand request, CancellationToken cancellationToken = default)
         {
             try
             {
                 var plan = await _repository.FindByIdAsync(PlanId.From(request.PlanId));
-                if (plan == null) return false;
+                if (plan == null)
+                    return Result.Fail("Plan alimentario no encontrado");
 
                 plan.AsignarRecetaATiempo(
                     request.NumDia,
@@ -37,12 +39,12 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiem
                 );
 
                 await _unitOfWork.Commit();
-                return true;
+                return Result.Ok("Receta asignada exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al asignar receta a tiempo de comida");
-                return false;
+                return Result.Fail(ex.Message);
             }
         }
     }

@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 using Catalog.Domain.Factory.Receta;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.UseCase.Command.Receta.CrearReceta
 {
-    public class CrearRecetaHandler : IRequestHandler<CrearRecetaCommand, Guid>
+    public class CrearRecetaHandler : IRequestHandler<CrearRecetaCommand, Result<Guid>>
     {
         private readonly IRecetaRepository _repository;
         private readonly IRecetaFactory _factory;
@@ -25,7 +26,7 @@ namespace Catalog.Application.UseCase.Command.Receta.CrearReceta
             _logger = logger;
         }
 
-        public async Task<Guid> Handle(CrearRecetaCommand request, CancellationToken cancellationToken = default)
+        public async Task<Result<Guid>> Handle(CrearRecetaCommand request, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -34,12 +35,12 @@ namespace Catalog.Application.UseCase.Command.Receta.CrearReceta
                 await _repository.CreateAsync(receta);
                 await _unitOfWork.Commit();
 
-                return receta.Id.Value;
+                return Result<Guid>.Ok(receta.Id.Value, "Receta creada exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear receta");
-                throw;
+                return Result.Fail<Guid>(ex.Message);
             }
         }
     }

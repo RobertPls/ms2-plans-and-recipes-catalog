@@ -58,7 +58,8 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                             var recetaDto = new ComposicionRecetaDto
                             {
                                 RecetaId = receta.Id.Value,
-                                NombreReceta = receta.Nombre
+                                NombreReceta = receta.Nombre,
+                                Racion = new RacionDto { Cantidad = asig.Racion.Cantidad }
                             };
 
                             foreach (var ing in receta.Ingredientes)

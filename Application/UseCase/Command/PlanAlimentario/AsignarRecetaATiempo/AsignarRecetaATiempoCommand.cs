@@ -1,9 +1,10 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 
 namespace Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiempo
 {
-    public class AsignarRecetaATiempoCommand : IRequest<bool>
+    public class AsignarRecetaATiempoCommand : IRequest<Result>
     {
         public Guid PlanId { get; set; }
         public int NumDia { get; set; }

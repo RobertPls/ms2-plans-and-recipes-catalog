@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 using Catalog.Domain.Repository.Receta;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.UseCase.Command.Receta.AgregarIngrediente
 {
-    public class AgregarIngredienteHandler : IRequestHandler<AgregarIngredienteCommand, bool>
+    public class AgregarIngredienteHandler : IRequestHandler<AgregarIngredienteCommand, Result>
     {
         private readonly IRecetaRepository _recetaRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -22,12 +23,13 @@ namespace Catalog.Application.UseCase.Command.Receta.AgregarIngrediente
             _logger = logger;
         }
 
-        public async Task<bool> Handle(AgregarIngredienteCommand request, CancellationToken cancellationToken = default)
+        public async Task<Result> Handle(AgregarIngredienteCommand request, CancellationToken cancellationToken = default)
         {
             try
             {
                 var receta = await _recetaRepository.FindByIdAsync(RecetaId.From(request.RecetaId));
-                if (receta == null) return false;
+                if (receta == null)
+                    return Result.Fail("Receta no encontrada");
 
                 receta.AgregarIngrediente(
                     AlimentoId.From(request.AlimentoId),
@@ -35,12 +37,12 @@ namespace Catalog.Application.UseCase.Command.Receta.AgregarIngrediente
                 );
 
                 await _unitOfWork.Commit();
-                return true;
+                return Result.Ok("Ingrediente agregado exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al agregar ingrediente");
-                return false;
+                return Result.Fail(ex.Message);
             }
         }
     }

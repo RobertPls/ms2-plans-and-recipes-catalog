@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 using Catalog.Domain.Repository.PlanAlimentario;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComida
 {
-    public class AgregarTiempoComidaHandler : IRequestHandler<AgregarTiempoComidaCommand, bool>
+    public class AgregarTiempoComidaHandler : IRequestHandler<AgregarTiempoComidaCommand, Result>
     {
         private readonly IPlanAlimentarioRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -22,22 +23,23 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComid
             _logger = logger;
         }
 
-        public async Task<bool> Handle(AgregarTiempoComidaCommand request, CancellationToken cancellationToken = default)
+        public async Task<Result> Handle(AgregarTiempoComidaCommand request, CancellationToken cancellationToken = default)
         {
             try
             {
                 var plan = await _repository.FindByIdAsync(PlanId.From(request.PlanId));
-                if (plan == null) return false;
+                if (plan == null)
+                    return Result.Fail("Plan alimentario no encontrado");
 
                 plan.AgregarTiempoDeComidaADia(request.NumDia, request.Nombre, request.Orden);
 
                 await _unitOfWork.Commit();
-                return true;
+                return Result.Ok("Tiempo de comida agregado exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al agregar tiempo de comida");
-                return false;
+                return Result.Fail(ex.Message);
             }
         }
     }

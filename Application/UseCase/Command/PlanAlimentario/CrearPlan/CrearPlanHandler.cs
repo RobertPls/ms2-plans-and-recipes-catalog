@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 using Catalog.Domain;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan
 {
-    public class CrearPlanHandler : IRequestHandler<CrearPlanCommand, Guid>
+    public class CrearPlanHandler : IRequestHandler<CrearPlanCommand, Result<Guid>>
     {
         private readonly IPlanAlimentarioRepository _repository;
         private readonly IPlanAlimentarioFactory _factory;
@@ -27,7 +28,7 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan
             _logger = logger;
         }
 
-        public async Task<Guid> Handle(CrearPlanCommand request, CancellationToken cancellationToken = default)
+        public async Task<Result<Guid>> Handle(CrearPlanCommand request, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -40,12 +41,12 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan
                 await _repository.CreateAsync(plan);
                 await _unitOfWork.Commit();
 
-                return plan.Id.Value;
+                return Result<Guid>.Ok(plan.Id.Value, "Plan alimentario creado exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear plan alimentario");
-                throw;
+                return Result.Fail<Guid>(ex.Message);
             }
         }
     }

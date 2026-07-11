@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 using Catalog.Domain.Factory.Alimento;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.UseCase.Command.Alimento.CrearAlimento
 {
-    public class CrearAlimentoHandler : IRequestHandler<CrearAlimentoCommand, Guid>
+    public class CrearAlimentoHandler : IRequestHandler<CrearAlimentoCommand, Result<Guid>>
     {
         private readonly IAlimentoRepository _repository;
         private readonly IAlimentoFactory _factory;
@@ -26,7 +27,7 @@ namespace Catalog.Application.UseCase.Command.Alimento.CrearAlimento
             _logger = logger;
         }
 
-        public async Task<Guid> Handle(CrearAlimentoCommand request, CancellationToken cancellationToken = default)
+        public async Task<Result<Guid>> Handle(CrearAlimentoCommand request, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -40,12 +41,12 @@ namespace Catalog.Application.UseCase.Command.Alimento.CrearAlimento
                 await _repository.CreateAsync(alimento);
                 await _unitOfWork.Commit();
 
-                return alimento.Id.Value;
+                return Result<Guid>.Ok(alimento.Id.Value, "Alimento creado exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear alimento");
-                throw;
+                return Result.Fail<Guid>(ex.Message);
             }
         }
     }

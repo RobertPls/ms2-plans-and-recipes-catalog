@@ -1,9 +1,10 @@
+using Catalog.Application.Utils;
 using Shared.Core;
 using MediatR;
 
 namespace Catalog.Application.UseCase.Command.Alimento.ActualizarInfoNutricional
 {
-    public class ActualizarInfoNutricionalCommand : IRequest<bool>
+    public class ActualizarInfoNutricionalCommand : IRequest<Result>
     {
         public Guid AlimentoId { get; set; }
         public decimal Gramos { get; set; }

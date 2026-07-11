@@ -1,6 +1,7 @@
 using Catalog.Application.Dto;
 using Catalog.Application.UseCase.Query.PlanAlimentario;
 using Catalog.Domain.Repository.PlanAlimentario;
+using Catalog.Domain.Repository.Receta;
 using Catalog.Domain.ValueObjects;
 using Shared.Core;
 using MediatR;
@@ -11,11 +12,13 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
     public class GetPlanByIdHandler : IRequestHandler<GetPlanByIdQuery, PlanAlimentarioDto?>
     {
         private readonly IPlanAlimentarioRepository _repository;
+        private readonly IRecetaRepository _recetaRepository;
         private readonly ILogger<GetPlanByIdHandler> _logger;
 
-        public GetPlanByIdHandler(IPlanAlimentarioRepository repository, ILogger<GetPlanByIdHandler> logger)
+        public GetPlanByIdHandler(IPlanAlimentarioRepository repository, IRecetaRepository recetaRepository, ILogger<GetPlanByIdHandler> logger)
         {
             _repository = repository;
+            _recetaRepository = recetaRepository;
             _logger = logger;
         }
 
@@ -46,9 +49,11 @@ namespace Catalog.Infrastructure.Query.PlanAlimentario
                         };
                         foreach (var asig in tiempo.RecetasAsignadas)
                         {
+                            var receta = await _recetaRepository.FindByIdAsync(asig.RecetaId);
                             tDto.Recetas.Add(new RecetaAsignadaDto
                             {
                                 RecetaId = asig.RecetaId.Value,
+                                NombreReceta = receta?.Nombre ?? "Unknown",
                                 Racion = asig.Racion.Cantidad
                             });
                         }

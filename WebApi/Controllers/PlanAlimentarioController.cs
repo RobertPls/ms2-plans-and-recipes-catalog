@@ -1,3 +1,4 @@
+using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan;
 using Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComida;
 using Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiempo;
@@ -23,8 +24,10 @@ namespace Catalog.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CrearPlanCommand command)
         {
-            var id = await _mediator.Send(command);
-            return Ok(ApiResponse<Guid>.Ok(id, "Plan alimentario creado exitosamente"));
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
+                return Ok(ApiResponse<Guid>.Ok(result.Value, result.Message));
+            return BadRequest(ApiResponse<Guid>.Fail(result.Message, result.Errors));
         }
 
         [HttpPost("{planId:guid}/dias/{numDia}/tiempos")]
@@ -33,9 +36,9 @@ namespace Catalog.WebApi.Controllers
             command.PlanId = planId;
             command.NumDia = numDia;
             var result = await _mediator.Send(command);
-            return result
-                ? Ok(ApiResponse.Ok("Tiempo de comida agregado exitosamente"))
-                : BadRequest(ApiResponse.Fail("No se pudo agregar el tiempo de comida"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse.Ok(result.Message));
+            return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
 
         [HttpPost("{planId:guid}/dias/{numDia}/tiempos/{tId:guid}/recetas")]
@@ -45,17 +48,20 @@ namespace Catalog.WebApi.Controllers
             command.NumDia = numDia;
             command.TiempoComidaId = tId;
             var result = await _mediator.Send(command);
-            return result
-                ? Ok(ApiResponse.Ok("Receta asignada exitosamente"))
-                : BadRequest(ApiResponse.Fail("No se pudo asignar la receta"));
+            if (result.IsSuccess)
+                return Ok(ApiResponse.Ok(result.Message));
+            return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{planId:guid}")]
+        public async Task<IActionResult> GetById(Guid planId)
         {
-            var result = await _mediator.Send(new GetPlanByIdQuery(id));
-            if (result == null) return NotFound(ApiResponse.Fail("Plan alimentario no encontrado"));
-            return Ok(ApiResponse.Ok(result, "Plan alimentario obtenido exitosamente"));
+            //var result = await _mediator.Send(new GetPlanByIdQuery(planId));
+            //if (result == null) return NotFound(ApiResponse.Fail("Plan alimentario no encontrado"));
+            //return Ok(ApiResponse.Ok(result, "Plan alimentario obtenido exitosamente"));
+            var result = await _mediator.Send(new GetComposicionPlanQuery(planId));
+            if (result == null) return NotFound(ApiResponse.Fail("Composición del plan no encontrada"));
+            return Ok(ApiResponse.Ok(result, "Composición del plan obtenida exitosamente"));
         }
 
         [HttpGet]
@@ -66,12 +72,12 @@ namespace Catalog.WebApi.Controllers
             return Ok(ApiResponse.Ok(result, "Listado de planes obtenido exitosamente"));
         }
 
-        [HttpGet("{planId:guid}/composicion")]
-        public async Task<IActionResult> GetComposicion(Guid planId)
-        {
-            var result = await _mediator.Send(new GetComposicionPlanQuery(planId));
-            if (result == null) return NotFound(ApiResponse.Fail("Composición del plan no encontrada"));
-            return Ok(ApiResponse.Ok(result, "Composición del plan obtenida exitosamente"));
-        }
+        //[HttpGet("{planId:guid}/composicion")]
+        //public async Task<IActionResult> GetComposicion(Guid planId)
+        //{
+        //    var result = await _mediator.Send(new GetComposicionPlanQuery(planId));
+        //    if (result == null) return NotFound(ApiResponse.Fail("Composición del plan no encontrada"));
+        //    return Ok(ApiResponse.Ok(result, "Composición del plan obtenida exitosamente"));
+        //}
     }
 }
