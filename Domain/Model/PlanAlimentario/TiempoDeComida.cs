@@ -20,6 +20,9 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
 
         internal void AsignarReceta(RecetaId recetaId, Racion racion)
         {
+            if (_recetasAsignadas.Any(r => r.RecetaId == recetaId))
+                throw new BussinessRuleValidationException($"La receta {recetaId.Value} ya está asignada a este tiempo de comida");
+
             var asignacion = new AsignacionReceta(recetaId, racion);
             _recetasAsignadas.Add(asignacion);
         }

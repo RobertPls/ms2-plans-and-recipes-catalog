@@ -29,6 +29,6 @@ namespace Catalog.Application.Dto
     {
         public Guid RecetaId { get; set; }
         public string NombreReceta { get; set; } = null!;
-        public decimal Racion { get; set; }
+        public int Racion { get; set; }
     }
 }

@@ -31,27 +31,18 @@ namespace Catalog.WebApi.Controllers
             return BadRequest(ApiResponse<Guid>.Fail(result.Message, result.Errors));
         }
 
-        [HttpPost("{planId:guid}/dias/{numDia}/tiempos")]
-        public async Task<IActionResult> AgregarTiempoComida(Guid planId, int numDia, [FromBody] AgregarTiempoComidaRequest request)
+        [HttpPost("tiempos-comida")]
+        public async Task<IActionResult> AgregarTiempoComida([FromBody] AgregarTiempoComidaCommand command)
         {
-            var command = new AgregarTiempoComidaCommand
-            {
-                PlanId = planId,
-                NumDia = numDia,
-                Tipo = request.Tipo
-            };
             var result = await _mediator.Send(command);
             if (result.IsSuccess)
                 return Ok(ApiResponse.Ok(result.Message));
             return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
 
-        [HttpPost("{planId:guid}/dias/{numDia}/tiempos/{tId:guid}/recetas")]
-        public async Task<IActionResult> AsignarReceta(Guid planId, int numDia, Guid tId, [FromBody] AsignarRecetaATiempoCommand command)
+        [HttpPost("asignar-recetas")]
+        public async Task<IActionResult> AsignarReceta([FromBody] AsignarRecetaATiempoCommand command)
         {
-            command.PlanId = planId;
-            command.NumDia = numDia;
-            command.TiempoComidaId = tId;
             var result = await _mediator.Send(command);
             if (result.IsSuccess)
                 return Ok(ApiResponse.Ok(result.Message));

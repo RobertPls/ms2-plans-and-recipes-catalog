@@ -4,11 +4,11 @@ namespace Catalog.Domain.ValueObjects
 {
     public record Racion : ValueObject
     {
-        public decimal Cantidad { get; }
+        public int Cantidad { get; }
 
         private Racion() { }
 
-        public Racion(decimal cantidad)
+        public Racion(int cantidad)
         {
             if (cantidad <= 0)
                 throw new BussinessRuleValidationException("Racion must be greater than zero");

@@ -58,5 +58,21 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             AddDomainEvent(new RecetaAsignadaATiempo(Id, numDia, tId, recetaId, racion.Cantidad));
         }
 
+        public void AsignarRecetaATiempo(Guid tId, RecetaId recetaId, Racion racion)
+        {
+            foreach (var dia in _diasDelPlan)
+            {
+                var tiempo = dia.BuscarTiempoDeComida(tId);
+                if (tiempo != null)
+                {
+                    tiempo.AsignarReceta(recetaId, racion);
+                    AddDomainEvent(new RecetaAsignadaATiempo(Id, dia.NumeroDia, tId, recetaId, racion.Cantidad));
+                    return;
+                }
+            }
+
+            throw new BussinessRuleValidationException($"Tiempo de comida {tId} no existe en el plan");
+        }
+
     }
 }

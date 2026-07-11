@@ -31,13 +31,16 @@ namespace Catalog.Application.UseCase.Command.Receta.AgregarIngrediente
                 if (receta == null)
                     return Result.Fail("Receta no encontrada");
 
-                receta.AgregarIngrediente(
-                    AlimentoId.From(request.AlimentoId),
-                    new Porcion(request.Cantidad, request.Unidad)
-                );
+                foreach (var item in request.Ingredientes)
+                {
+                    receta.AgregarIngrediente(
+                        AlimentoId.From(item.AlimentoId),
+                        new Porcion(item.Cantidad, item.Unidad)
+                    );
+                }
 
                 await _unitOfWork.Commit();
-                return Result.Ok("Ingrediente agregado exitosamente");
+                return Result.Ok($"{request.Ingredientes.Count} ingrediente(s) agregado(s) exitosamente");
             }
             catch (Exception ex)
             {

@@ -30,10 +30,9 @@ namespace Catalog.WebApi.Controllers
             return BadRequest(ApiResponse<Guid>.Fail(result.Message, result.Errors));
         }
 
-        [HttpPost("{recetaId:guid}/ingredientes")]
-        public async Task<IActionResult> AgregarIngrediente(Guid recetaId, [FromBody] AgregarIngredienteCommand command)
+        [HttpPost("ingredientes")]
+        public async Task<IActionResult> AgregarIngrediente([FromBody] AgregarIngredienteCommand command)
         {
-            command.RecetaId = recetaId;
             var result = await _mediator.Send(command);
             if (result.IsSuccess)
                 return Ok(ApiResponse.Ok(result.Message));

@@ -43,8 +43,7 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimen
 
             builder.Property(x => x.Duracion)
                 .HasConversion(duracionConverter)
-                .HasColumnName("duracion")
-                .HasMaxLength(20);
+                .HasColumnName("duracion");
 
             builder.Property(x => x.ComidasPorDia).HasColumnName("comidasPorDia");
 
@@ -105,7 +104,7 @@ namespace Catalog.Infrastructure.EntityFramework.Config.WriteConfig.PlanesAlimen
 
                 asig.OwnsOne(x => x.Racion, racion =>
                 {
-                    racion.Property(r => r.Cantidad).HasColumnName("racionCantidad").HasPrecision(12, 4);
+                    racion.Property(r => r.Cantidad).HasColumnName("racionCantidad");
                 });
             });
         }

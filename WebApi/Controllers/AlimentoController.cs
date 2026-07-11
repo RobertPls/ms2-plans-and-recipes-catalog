@@ -59,10 +59,9 @@ namespace Catalog.WebApi.Controllers
             return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
         }
 
-        [HttpPut("{alimentoId:guid}")]
-        public async Task<IActionResult> Update(Guid alimentoId, [FromBody] ActualizarAlimentoCommand command)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] ActualizarAlimentoCommand command)
         {
-            command.AlimentoId = alimentoId;
             var result = await _mediator.Send(command);
             if (result.IsSuccess)
                 return Ok(ApiResponse.Ok(result.Message));

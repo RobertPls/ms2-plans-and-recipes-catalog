@@ -31,15 +31,17 @@ namespace Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiem
                 if (plan == null)
                     return Result.Fail("Plan alimentario no encontrado");
 
-                plan.AsignarRecetaATiempo(
-                    request.NumDia,
-                    request.TiempoComidaId,
-                    RecetaId.From(request.RecetaId),
-                    new Racion(request.RacionCantidad)
-                );
+                foreach (var item in request.Recetas)
+                {
+                    plan.AsignarRecetaATiempo(
+                        request.TiempoComidaId,
+                        RecetaId.From(item.RecetaId),
+                        new Racion(item.RacionCantidad)
+                    );
+                }
 
                 await _unitOfWork.Commit();
-                return Result.Ok("Receta asignada exitosamente");
+                return Result.Ok($"{request.Recetas.Count} receta(s) asignada(s) exitosamente");
             }
             catch (Exception ex)
             {
