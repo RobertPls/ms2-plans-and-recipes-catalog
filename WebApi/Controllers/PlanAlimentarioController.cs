@@ -3,6 +3,7 @@ using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Command.PlanAlimentario.CrearPlan;
 using Catalog.Application.UseCase.Command.PlanAlimentario.AgregarTiempoComida;
 using Catalog.Application.UseCase.Command.PlanAlimentario.AsignarRecetaATiempo;
+using Catalog.Application.UseCase.Command.PlanAlimentario.RemoverRecetaDeTiempo;
 using Catalog.Application.UseCase.Query.PlanAlimentario;
 using Catalog.WebApi.Utils;
 using Shared.Core;
@@ -44,6 +45,20 @@ namespace Catalog.WebApi.Controllers
         public async Task<IActionResult> AsignarReceta([FromBody] AsignarRecetaATiempoCommand command)
         {
             var result = await _mediator.Send(command);
+            if (result.IsSuccess)
+                return Ok(ApiResponse.Ok(result.Message));
+            return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
+        }
+
+        [HttpDelete("{planId:guid}/tiempos-comida/{tiempoComidaId:guid}/recetas/{recetaId:guid}")]
+        public async Task<IActionResult> RemoverRecetaDeTiempo(Guid planId, Guid tiempoComidaId, Guid recetaId)
+        {
+            var result = await _mediator.Send(new RemoverRecetaDeTiempoCommand
+            {
+                PlanId = planId,
+                TiempoComidaId = tiempoComidaId,
+                RecetaId = recetaId
+            });
             if (result.IsSuccess)
                 return Ok(ApiResponse.Ok(result.Message));
             return BadRequest(ApiResponse.Fail(result.Message, result.Errors));

@@ -2,6 +2,7 @@ using Catalog.Application.Dto;
 using Catalog.Application.Utils;
 using Catalog.Application.UseCase.Command.Receta.CrearReceta;
 using Catalog.Application.UseCase.Command.Receta.AgregarIngrediente;
+using Catalog.Application.UseCase.Command.Receta.RemoverIngrediente;
 using Catalog.Application.UseCase.Query.Receta;
 using Catalog.WebApi.Utils;
 using Shared.Core;
@@ -34,6 +35,15 @@ namespace Catalog.WebApi.Controllers
         public async Task<IActionResult> AgregarIngrediente([FromBody] AgregarIngredienteCommand command)
         {
             var result = await _mediator.Send(command);
+            if (result.IsSuccess)
+                return Ok(ApiResponse.Ok(result.Message));
+            return BadRequest(ApiResponse.Fail(result.Message, result.Errors));
+        }
+
+        [HttpDelete("{recetaId:guid}/ingredientes/{alimentoId:guid}")]
+        public async Task<IActionResult> RemoverIngrediente(Guid recetaId, Guid alimentoId)
+        {
+            var result = await _mediator.Send(new RemoverIngredienteCommand { RecetaId = recetaId, AlimentoId = alimentoId });
             if (result.IsSuccess)
                 return Ok(ApiResponse.Ok(result.Message));
             return BadRequest(ApiResponse.Fail(result.Message, result.Errors));

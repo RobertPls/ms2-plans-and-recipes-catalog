@@ -36,6 +36,17 @@ namespace Catalog.Domain.Model.Recetas
             AddDomainEvent(new IngredienteAgregadoAReceta(Id, alimentoId, porcion.Cantidad));
         }
 
+        public void RemoverIngrediente(AlimentoId alimentoId)
+        {
+            var ingrediente = _ingredientes.FirstOrDefault(i => i.AlimentoId == alimentoId);
+            if (ingrediente == null)
+                throw new BussinessRuleValidationException($"El ingrediente {alimentoId.Value} no existe en la receta");
+
+            _ingredientes.Remove(ingrediente);
+
+            AddDomainEvent(new IngredienteRemovidoDeReceta(Id, alimentoId, ingrediente.Porcion.Cantidad));
+        }
+
         public InfoNutricional CalcularInfoNutricionalTotal(Func<AlimentoId, Alimento> obtenerAlimento)
         {
             decimal totalCalorias = 0, totalProteinas = 0, totalCarbos = 0, totalGrasas = 0;

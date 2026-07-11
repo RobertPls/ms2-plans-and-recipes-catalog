@@ -26,5 +26,14 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             var asignacion = new AsignacionReceta(recetaId, racion);
             _recetasAsignadas.Add(asignacion);
         }
+
+        internal void RemoverReceta(RecetaId recetaId)
+        {
+            var asignacion = _recetasAsignadas.FirstOrDefault(r => r.RecetaId == recetaId);
+            if (asignacion == null)
+                throw new BussinessRuleValidationException($"La receta {recetaId.Value} no está asignada a este tiempo de comida");
+
+            _recetasAsignadas.Remove(asignacion);
+        }
     }
 }

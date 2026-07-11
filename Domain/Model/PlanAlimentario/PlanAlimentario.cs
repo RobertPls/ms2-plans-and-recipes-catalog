@@ -74,5 +74,20 @@ namespace Catalog.Domain.Model.PlanesAlimentarios
             throw new BussinessRuleValidationException($"Tiempo de comida {tId} no existe en el plan");
         }
 
+        public void RemoverRecetaDeTiempo(Guid tId, RecetaId recetaId)
+        {
+            foreach (var dia in _diasDelPlan)
+            {
+                var tiempo = dia.BuscarTiempoDeComida(tId);
+                if (tiempo != null)
+                {
+                    tiempo.RemoverReceta(recetaId);
+                    AddDomainEvent(new RecetaRemovidaDeTiempo(Id, dia.NumeroDia, tId, recetaId));
+                    return;
+                }
+            }
+
+            throw new BussinessRuleValidationException($"Tiempo de comida {tId} no existe en el plan");
+        }
     }
 }
