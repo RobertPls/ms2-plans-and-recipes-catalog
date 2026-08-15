@@ -11,6 +11,7 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.Receta
         {
             builder.ToTable("Receta");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).HasColumnName("id");
 
             builder.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(500);
             builder.Property(x => x.Instrucciones).HasColumnName("instrucciones").HasMaxLength(4000);
@@ -18,7 +19,7 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.Receta
             builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
             builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
             builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
-            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted").HasDefaultValue(false);
             builder.HasMany(x => x.Ingredientes).WithOne(x => x.Receta);
         }
 

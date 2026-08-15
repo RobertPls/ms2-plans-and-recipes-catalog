@@ -20,6 +20,10 @@ namespace Catalog.Infrastructure.EntityFramework.ReadModel.PlanAlimentario
         public Guid PlanAlimentarioId { get; set; }
         public PlanAlimentarioReadModel PlanAlimentario { get; set; } = null!;
         public List<TiempoDeComidaReadModel> TiemposDeComida { get; set; } = new();
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class TiempoDeComidaReadModel
@@ -30,6 +34,10 @@ namespace Catalog.Infrastructure.EntityFramework.ReadModel.PlanAlimentario
         public Guid DiaDelPlanId { get; set; }
         public DiaDelPlanReadModel DiaDelPlan { get; set; } = null!;
         public List<RecetaAsignadaReadModel> RecetasAsignadas { get; set; } = new();
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class RecetaAsignadaReadModel

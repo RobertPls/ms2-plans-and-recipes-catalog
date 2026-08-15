@@ -26,9 +26,9 @@ namespace Catalog.Infrastructure
             var connectionString = configuration.GetConnectionString("CatalogDbConnectionString");
 
             services.AddDbContext<ReadDbContext>(context =>
-                context.UseSqlite(connectionString));
+                context.UseNpgsql(connectionString));
             services.AddDbContext<WriteDbContext>(context =>
-                context.UseSqlite(connectionString));
+                context.UseNpgsql(connectionString));
 
             services.AddScoped<IPlanAlimentarioRepository, PlanAlimentarioRepository>();
             services.AddScoped<IRecetaRepository, RecetaRepository>();

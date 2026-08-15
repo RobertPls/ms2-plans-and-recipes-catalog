@@ -45,11 +45,8 @@ namespace Catalog.WebApi
 
             using (var scope = app.ApplicationServices.CreateScope())
             {
-                var writeContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
-                writeContext.Database.EnsureCreated();
-
                 var readContext = scope.ServiceProvider.GetRequiredService<ReadDbContext>();
-                readContext.Database.EnsureCreated();
+                readContext.Database.Migrate();
 
                 var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
                 dbInitializer.Initialize().GetAwaiter().GetResult();

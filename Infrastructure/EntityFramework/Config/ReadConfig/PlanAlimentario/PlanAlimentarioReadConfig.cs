@@ -13,6 +13,7 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.PlanAlimentar
         {
             builder.ToTable("PlanAlimentario");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).HasColumnName("id");
 
             builder.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(500);
             builder.Property(x => x.DuracionTipo).HasColumnName("duracion").HasMaxLength(20);
@@ -21,7 +22,7 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.PlanAlimentar
             builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
             builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
             builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
-            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted").HasDefaultValue(false);
             builder.HasMany(x => x.DiasDelPlan).WithOne(x => x.PlanAlimentario);
         }
 
@@ -31,6 +32,10 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.PlanAlimentar
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.NumeroDia).HasColumnName("numeroDia");
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted").HasDefaultValue(false);
 
             builder.HasMany(x => x.TiemposDeComida).WithOne(x => x.DiaDelPlan);
         }
@@ -42,6 +47,10 @@ namespace Catalog.Infrastructure.EntityFramework.Config.ReadConfig.PlanAlimentar
 
             builder.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(200);
             builder.Property(x => x.Orden).HasColumnName("orden");
+            builder.Property(x => x.CreatedAt).HasColumnName("createdAt");
+            builder.Property(x => x.UpdatedAt).HasColumnName("updatedAt");
+            builder.Property(x => x.DeletedAt).HasColumnName("deletedAt");
+            builder.Property(x => x.IsDeleted).HasColumnName("isDeleted").HasDefaultValue(false);
 
             builder.HasMany(x => x.RecetasAsignadas).WithOne(x => x.TiempoDeComida);
         }

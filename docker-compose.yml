@@ -1,0 +1,50 @@
+name: ms2-plans-and-recipes-catalog
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: catalog-db
+    environment:
+      POSTGRES_DB: catalog
+      POSTGRES_USER: dev-only
+      POSTGRES_PASSWORD: dev-only-password
+    ports:
+      - "5433:5432"
+    volumes:
+      - catalog-db-data:/var/lib/postgresql/data
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev-only -d catalog"]
+      interval: 1s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+    restart: unless-stopped
+
+  webapi:
+    image: robertperezlino/ms2-plans-and-recipes-catalog:latest
+    container_name: catalog-webapi
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__CatalogDbConnectionString: Host=db;Port=5432;Database=catalog;Username=dev-only;Password=dev-only-password
+    networks: [backend]
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/swagger/v1/swagger.json || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  catalog-db-data:
+
+networks:
+  backend:
+    external: true
+    name: equipo_backend

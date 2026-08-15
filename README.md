@@ -36,7 +36,7 @@ Gestionar y exponer un catálogo completo de alimentos con su información nutri
 | Arquitectura | DDD + Clean Architecture |
 | Patrón CQRS | MediatR |
 | ORM | Entity Framework Core |
-| Base de datos | SQLite |
+| Base de datos | PostgreSQL (Docker) |
 | Documentación API | Swagger / OpenAPI |
 | Patrones | Repository, Unit of Work, Factory, Result |
 
@@ -82,4 +82,51 @@ ms2-plans-and-recipes-catalog/
 | DELETE | `/planes/{planId}/tiempos-comida/{tiempoComidaId}/recetas/{recetaId}` | Remover receta de tiempo de comida |
 | GET | `/planes/{planId}` | Obtener composición del plan |
 | GET | `/planes` | Listar planes |
+
+## Requisitos
+
+| Herramienta | Versión |
+|-------------|---------|
+| Docker Desktop | Última estable (recomendado) |
+| .NET SDK | 10.x (solo si quieres correrlo directamente) |
+
+## Cómo ejecutar el proyecto
+
+### Opción 1 — Docker Compose (recomendada)
+
+Levanta la API y la base de datos PostgreSQL en un solo comando desde la raíz del proyecto:
+
+```bash
+docker compose up -d
+```
+
+Al primer arranque se crea la base de datos, se aplican las migraciones automáticamente y se cargan los datos de ejemplo.
+
+| Recurso | URL |
+|---------|-----|
+| Documentación interactiva (Swagger) | http://localhost:8080/swagger |
+| API | http://localhost:8080/api/v1/... |
+| PostgreSQL | localhost:5433 |
+
+Para detener el stack:
+
+```bash
+docker compose down
+```
+
+### Opción 2 — Ejecución directa con el SDK de .NET
+
+Requiere un servidor PostgreSQL disponible (por ejemplo, el del `docker compose`) y la cadena de conexión configurada en `WebApi/appsettings.json`:
+
+```bash
+dotnet restore
+dotnet run --project WebApi/WebApi.csproj
+```
+
+Al arrancar, la aplicación aplica las migraciones pendientes automáticamente. Swagger queda disponible en `http://localhost:5000/swagger` (o el puerto definido en `launchSettings.json`).
+
+## Pruebas
+
+```bash
+dotnet test
 ```
