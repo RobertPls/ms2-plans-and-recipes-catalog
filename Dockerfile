@@ -10,7 +10,7 @@ COPY WebApi/WebApi.csproj WebApi/
 RUN dotnet restore WebApi/WebApi.csproj
 
 COPY . .
-RUN dotnet publish WebApi/WebApi.csproj -c Release -o /app/publish
+RUN dotnet publish WebApi/WebApi.csproj -c Release -o /app/publish --no-restore
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
