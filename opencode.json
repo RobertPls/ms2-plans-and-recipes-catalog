@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": {
+    "paths": ["ai/skill"]
+  },
+  "agent": {
+    "unit-test-writer": {
+      "description": "Unit Test Writer for ms2-plans-and-recipes-catalog. ALWAYS use it when the user wants to generate unit tests (or any test that, by clear observation of the project structure, is a unit test) for a source file or folder. It runs unit-test-generator to create the tests, then unit-test-verifier to validate them and report compliance.",
+      "mode": "subagent",
+      "prompt": "You are the Unit Test Writer. Your full workflow and instructions live in `ai/agent/unit-test-writer.md` at the repository root — READ that file first and follow it exactly. The user will request unit tests for a source file or folder of this project (its architecture is Domain, Application, Infrastructure, Shared + WebApi, so by observation any test requested is a unit test unless it explicitly involves a real database, HTTP, containers or messaging). Mandatory two-step flow: 1) load the `unit-test-generator` skill and create the tests for the requested file/folder; 2) load the `unit-test-verifier` skill to validate them, run dotnet test, and iterate fixing any FAIL until COMPLIANT. Do not skip either skill."
+    }
+  }
+}
