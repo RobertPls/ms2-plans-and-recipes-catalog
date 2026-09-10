@@ -81,4 +81,18 @@ namespace Catalog.Tests.IntegrationTest.Setup
     {
         public List<PlanData>? Data { get; set; }
     }
+
+    public class InfoNutricionalData
+    {
+        public decimal Cantidad { get; set; }
+        public decimal Calorias { get; set; }
+        public decimal Proteinas { get; set; }
+        public decimal Carbohidratos { get; set; }
+        public decimal Grasas { get; set; }
+    }
+
+    public class InfoNutricionalResponse : Envelope
+    {
+        public InfoNutricionalData? Data { get; set; }
+    }
 }

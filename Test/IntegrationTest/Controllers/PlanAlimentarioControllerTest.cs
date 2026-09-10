@@ -87,6 +87,36 @@ namespace Catalog.Tests.IntegrationTest.Controllers
         }
 
         [Fact]
+        public async Task AgregarTiempoComida_WithValidRequest_AddsTiempo()
+        {
+            //Arrange
+            var client = _factory.CreateClient();
+            var createResponse = await client.PostAsJsonAsync("/api/v1/planes", NuevoPlan());
+            createResponse.EnsureSuccessStatusCode();
+            var created = await createResponse.Content.ReadFromJsonAsync<PlanCreateResponse>();
+
+            //Act
+            var response = await client.PostAsJsonAsync("/api/v1/planes/tiempos-comida", new
+            {
+                PlanId = created!.Data,
+                NumDia = 1,
+                Tipo = 1
+            });
+
+            //Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadFromJsonAsync<Envelope>();
+            Assert.NotNull(body);
+            Assert.True(body!.Success);
+
+            using var scope = _factory.Services.CreateScope();
+            var repository = scope.ServiceProvider.GetRequiredService<IPlanAlimentarioRepository>();
+            var plan = await repository.FindByIdAsync(created.Data);
+            Assert.NotNull(plan);
+            Assert.Single(plan!.DiasDelPlan.Single(d => d.NumeroDia == 1).TiemposDeComida);
+        }
+
+        [Fact]
         public async Task AsignarReceta_WhenPlanDoesNotExist_Returns400()
         {
             //Arrange
@@ -108,6 +138,64 @@ namespace Catalog.Tests.IntegrationTest.Controllers
         }
 
         [Fact]
+        public async Task AsignarReceta_WithValidRequest_PersistsAssignment()
+        {
+            //Arrange
+            var client = _factory.CreateClient();
+            var planResponse = await client.PostAsJsonAsync("/api/v1/planes", NuevoPlan());
+            planResponse.EnsureSuccessStatusCode();
+            var planCreated = await planResponse.Content.ReadFromJsonAsync<PlanCreateResponse>();
+
+            var tiempoResponse = await client.PostAsJsonAsync("/api/v1/planes/tiempos-comida", new
+            {
+                PlanId = planCreated!.Data,
+                NumDia = 1,
+                Tipo = 1
+            });
+            tiempoResponse.EnsureSuccessStatusCode();
+
+            var recetaResponse = await client.PostAsJsonAsync("/api/v1/recetas", new
+            {
+                Nombre = "Ensalada",
+                Instrucciones = "Mezclar y servir"
+            });
+            recetaResponse.EnsureSuccessStatusCode();
+            var recetaCreated = await recetaResponse.Content.ReadFromJsonAsync<RecetaCreateResponse>();
+
+            Guid tiempoId;
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlanAlimentarioRepository>();
+                var plan = await repository.FindByIdAsync(planCreated.Data);
+                tiempoId = plan!.DiasDelPlan.Single(d => d.NumeroDia == 1).TiemposDeComida.Single().Id;
+            }
+
+            //Act
+            var response = await client.PostAsJsonAsync("/api/v1/planes/asignar-recetas", new
+            {
+                PlanId = planCreated.Data,
+                TiempoComidaId = tiempoId,
+                Recetas = new[]
+                {
+                    new { RecetaId = recetaCreated!.Data, RacionCantidad = 10 }
+                }
+            });
+
+            //Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadFromJsonAsync<Envelope>();
+            Assert.NotNull(body);
+            Assert.True(body!.Success);
+
+            using var verifyScope = _factory.Services.CreateScope();
+            var verifyRepository = verifyScope.ServiceProvider.GetRequiredService<IPlanAlimentarioRepository>();
+            var persistedPlan = await verifyRepository.FindByIdAsync(planCreated.Data);
+            Assert.NotNull(persistedPlan);
+            var tiempo = persistedPlan!.DiasDelPlan.Single(d => d.NumeroDia == 1).TiemposDeComida.Single();
+            Assert.Contains(tiempo.RecetasAsignadas, a => a.RecetaId == recetaCreated.Data);
+        }
+
+        [Fact]
         public async Task RemoverRecetaDeTiempo_WhenPlanDoesNotExist_Returns400()
         {
             //Arrange
@@ -119,6 +207,68 @@ namespace Catalog.Tests.IntegrationTest.Controllers
 
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task RemoverRecetaDeTiempo_WithValidRequest_RemovesRecipe()
+        {
+            //Arrange
+            var client = _factory.CreateClient();
+            var planResponse = await client.PostAsJsonAsync("/api/v1/planes", NuevoPlan());
+            planResponse.EnsureSuccessStatusCode();
+            var planCreated = await planResponse.Content.ReadFromJsonAsync<PlanCreateResponse>();
+
+            var tiempoResponse = await client.PostAsJsonAsync("/api/v1/planes/tiempos-comida", new
+            {
+                PlanId = planCreated!.Data,
+                NumDia = 1,
+                Tipo = 1
+            });
+            tiempoResponse.EnsureSuccessStatusCode();
+
+            var recetaResponse = await client.PostAsJsonAsync("/api/v1/recetas", new
+            {
+                Nombre = "Ensalada",
+                Instrucciones = "Mezclar y servir"
+            });
+            recetaResponse.EnsureSuccessStatusCode();
+            var recetaCreated = await recetaResponse.Content.ReadFromJsonAsync<RecetaCreateResponse>();
+
+            Guid tiempoId;
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlanAlimentarioRepository>();
+                var plan = await repository.FindByIdAsync(planCreated.Data);
+                tiempoId = plan!.DiasDelPlan.Single(d => d.NumeroDia == 1).TiemposDeComida.Single().Id;
+            }
+
+            var assignResponse = await client.PostAsJsonAsync("/api/v1/planes/asignar-recetas", new
+            {
+                PlanId = planCreated.Data,
+                TiempoComidaId = tiempoId,
+                Recetas = new[]
+                {
+                    new { RecetaId = recetaCreated!.Data, RacionCantidad = 10 }
+                }
+            });
+            assignResponse.EnsureSuccessStatusCode();
+
+            //Act
+            var response = await client.DeleteAsync(
+                $"/api/v1/planes/{planCreated.Data}/tiempos-comida/{tiempoId}/recetas/{recetaCreated.Data}");
+
+            //Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadFromJsonAsync<Envelope>();
+            Assert.NotNull(body);
+            Assert.True(body!.Success);
+
+            using var verifyScope = _factory.Services.CreateScope();
+            var verifyRepository = verifyScope.ServiceProvider.GetRequiredService<IPlanAlimentarioRepository>();
+            var persistedPlan = await verifyRepository.FindByIdAsync(planCreated.Data);
+            Assert.NotNull(persistedPlan);
+            var tiempo = persistedPlan!.DiasDelPlan.Single(d => d.NumeroDia == 1).TiemposDeComida.Single();
+            Assert.DoesNotContain(tiempo.RecetasAsignadas, a => a.RecetaId == recetaCreated.Data);
         }
 
         [Fact]

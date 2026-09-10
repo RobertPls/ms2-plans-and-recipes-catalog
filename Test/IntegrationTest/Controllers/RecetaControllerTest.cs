@@ -204,6 +204,55 @@ namespace Catalog.Tests.IntegrationTest.Controllers
         }
 
         [Fact]
+        public async Task RemoverIngrediente_WithValidRequest_RemovesIngredient()
+        {
+            //Arrange
+            var client = _factory.CreateClient();
+            var recetaResponse = await client.PostAsJsonAsync("/api/v1/recetas", NuevaReceta());
+            recetaResponse.EnsureSuccessStatusCode();
+            var recetaCreated = await recetaResponse.Content.ReadFromJsonAsync<RecetaCreateResponse>();
+
+            var alimentoResponse = await client.PostAsJsonAsync("/api/v1/alimentos", new
+            {
+                Nombre = "Manzana",
+                Categoria = "Frutas",
+                UnidadMedida = 1,
+                Cantidad = 100m,
+                Calorias = 52m,
+                Proteinas = 0.3m,
+                Carbohidratos = 14m,
+                Grasas = 0.2m
+            });
+            alimentoResponse.EnsureSuccessStatusCode();
+            var alimentoCreated = await alimentoResponse.Content.ReadFromJsonAsync<AlimentoCreateResponse>();
+
+            var addResponse = await client.PostAsJsonAsync("/api/v1/recetas/ingredientes", new
+            {
+                RecetaId = recetaCreated!.Data,
+                Ingredientes = new[]
+                {
+                    new { AlimentoId = alimentoCreated!.Data, Cantidad = 150 }
+                }
+            });
+            addResponse.EnsureSuccessStatusCode();
+
+            //Act
+            var response = await client.DeleteAsync($"/api/v1/recetas/{recetaCreated.Data}/ingredientes/{alimentoCreated.Data}");
+
+            //Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadFromJsonAsync<Envelope>();
+            Assert.NotNull(body);
+            Assert.True(body!.Success);
+
+            using var scope = _factory.Services.CreateScope();
+            var repository = scope.ServiceProvider.GetRequiredService<IRecetaRepository>();
+            var receta = await repository.FindByIdAsync(recetaCreated.Data);
+            Assert.NotNull(receta);
+            Assert.DoesNotContain(receta!.Ingredientes, i => i.AlimentoId == alimentoCreated.Data);
+        }
+
+        [Fact]
         public async Task GetInfoNutricional_WhenRecetaDoesNotExist_Returns404()
         {
             //Arrange
@@ -214,6 +263,52 @@ namespace Catalog.Tests.IntegrationTest.Controllers
 
             //Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetInfoNutricional_AfterAddIngredient_ReturnsInfo()
+        {
+            //Arrange
+            var client = _factory.CreateClient();
+            var recetaResponse = await client.PostAsJsonAsync("/api/v1/recetas", NuevaReceta());
+            recetaResponse.EnsureSuccessStatusCode();
+            var recetaCreated = await recetaResponse.Content.ReadFromJsonAsync<RecetaCreateResponse>();
+
+            var alimentoResponse = await client.PostAsJsonAsync("/api/v1/alimentos", new
+            {
+                Nombre = "Manzana",
+                Categoria = "Frutas",
+                UnidadMedida = 1,
+                Cantidad = 100m,
+                Calorias = 52m,
+                Proteinas = 0.3m,
+                Carbohidratos = 14m,
+                Grasas = 0.2m
+            });
+            alimentoResponse.EnsureSuccessStatusCode();
+            var alimentoCreated = await alimentoResponse.Content.ReadFromJsonAsync<AlimentoCreateResponse>();
+
+            var addResponse = await client.PostAsJsonAsync("/api/v1/recetas/ingredientes", new
+            {
+                RecetaId = recetaCreated!.Data,
+                Ingredientes = new[]
+                {
+                    new { AlimentoId = alimentoCreated!.Data, Cantidad = 200 }
+                }
+            });
+            addResponse.EnsureSuccessStatusCode();
+
+            //Act
+            var response = await client.GetAsync($"/api/v1/recetas/{recetaCreated.Data}/info-nutricional");
+
+            //Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadFromJsonAsync<InfoNutricionalResponse>();
+            Assert.NotNull(body);
+            Assert.True(body!.Success);
+            Assert.NotNull(body.Data);
+            Assert.Equal(104m, body.Data.Calorias);
+            Assert.Equal(0.6m, body.Data.Proteinas);
         }
 
         [Fact]
