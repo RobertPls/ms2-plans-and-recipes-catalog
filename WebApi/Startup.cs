@@ -46,10 +46,13 @@ namespace Catalog.WebApi
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var readContext = scope.ServiceProvider.GetRequiredService<ReadDbContext>();
-                readContext.Database.Migrate();
+                if (readContext.Database.IsRelational())
+                {
+                    readContext.Database.Migrate();
 
-                var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-                dbInitializer.Initialize().GetAwaiter().GetResult();
+                    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+                    dbInitializer.Initialize().GetAwaiter().GetResult();
+                }
             }
 
             app.UseEndpoints(endpoints =>

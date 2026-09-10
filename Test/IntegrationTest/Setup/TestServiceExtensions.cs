@@ -1,0 +1,41 @@
+using Catalog.Domain.Repository.Alimento;
+using Catalog.Domain.Repository.PlanAlimentario;
+using Catalog.Domain.Repository.Receta;
+using Catalog.Infrastructure.EntityFramework.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Shared.Core;
+
+namespace Catalog.Tests.IntegrationTest.Setup
+{
+    public static class TestServiceExtensions
+    {
+        public static void ReplaceInfrastructureWithInMemory(this IServiceCollection services, string dbName)
+        {
+            services.ReplaceWithInMemoryFake<IAlimentoRepository, InMemoryAlimentoRepository>();
+            services.ReplaceWithInMemoryFake<IRecetaRepository, InMemoryRecetaRepository>();
+            services.ReplaceWithInMemoryFake<IPlanAlimentarioRepository, InMemoryPlanAlimentarioRepository>();
+            services.ReplaceWithInMemoryFake<IUnitOfWork, InMemoryUnitOfWork>();
+
+            services.RemoveAll<DbContextOptions<ReadDbContext>>();
+            services.AddSingleton(new DbContextOptionsBuilder<ReadDbContext>().UseInMemoryDatabase(dbName).Options);
+
+            services.RemoveAll<DbContextOptions<WriteDbContext>>();
+            services.AddSingleton(new DbContextOptionsBuilder<WriteDbContext>().UseInMemoryDatabase(dbName).Options);
+        }
+
+        private static void ReplaceWithInMemoryFake<TService, TFake>(this IServiceCollection services)
+            where TService : class
+            where TFake : class, TService
+        {
+            var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(TService));
+            if (descriptor is not null)
+            {
+                services.Remove(descriptor);
+            }
+
+            services.AddSingleton<TService, TFake>();
+        }
+    }
+}
